@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
-    "firebase": "^10.12.5",
+    "firebase": "^10.7.0",
     "lint-staged": "^15.2.7",
     "next": "^14.2.5",
     "react": "^18",
