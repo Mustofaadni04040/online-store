@@ -52,7 +52,7 @@ export default function RegisterView() {
               id="fullname"
               type="text"
               className={styles.register__form__item__input}
-              placeholder="johne doe"
+              placeholder="jhoen doe"
               required
             />
           </div>
@@ -63,7 +63,7 @@ export default function RegisterView() {
               id="email"
               type="email"
               className={styles.register__form__item__input}
-              placeholder="johne@gmail.com"
+              placeholder="jhoen@gmail.com"
               required
             />
           </div>
@@ -74,7 +74,7 @@ export default function RegisterView() {
               id="phone"
               type="text"
               className={styles.register__form__item__input}
-              placeholder="jhoen@gmail.com"
+              placeholder="0898923527"
               required
             />
           </div>
@@ -85,7 +85,7 @@ export default function RegisterView() {
               id="password"
               type="password"
               className={styles.register__form__item__input}
-              placeholder="jhoen@gmail.com"
+              placeholder="**************"
               required
             />
           </div>

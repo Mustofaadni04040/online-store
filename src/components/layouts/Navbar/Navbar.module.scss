@@ -1,0 +1,25 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  height: 70px;
+  padding: 0 15px;
+  background-color: #16a34a;
+  color: #fff;
+  position: fixed;
+  z-index: 100;
+  &__button {
+    background-color: #fff;
+    border: none;
+    outline: none;
+    padding: 12px 16px;
+    color: #16a34a;
+    border-radius: 5px;
+    cursor: pointer;
+    transition-duration: 300ms;
+  }
+  &__button:hover {
+    background-color: #eeeded;
+  }
+}
