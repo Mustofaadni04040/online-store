@@ -79,6 +79,19 @@ export default function LoginView() {
             {loading ? "Loading..." : "Login"}
           </button>
         </form>
+        <button
+          className={styles.login__form__google}
+          type="button"
+          onClick={() => signIn("google", { callbackUrl, redirect: false })}
+        >
+          <img
+            src="/google-icon.png"
+            alt="google-icon"
+            width={25}
+            height={25}
+          />
+          Login with Google
+        </button>
         <p className={styles.login__form__link}>
           Don&apos;t have an account? Sign up{" "}
           <Link href="/auth/register">here</Link>
