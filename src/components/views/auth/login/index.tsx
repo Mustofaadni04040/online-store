@@ -5,6 +5,8 @@ import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
 import Input from "@/components/ui/input";
 import Button from "@/components/ui/button";
+import AuthLayout from "@/components/layouts/AuthLayout";
+import Image from "next/image";
 
 export default function LoginView() {
   const { push, query } = useRouter();
@@ -44,48 +46,43 @@ export default function LoginView() {
   };
 
   return (
-    <div className={styles.login}>
-      <div className={styles.login__form}>
-        <h1 className={styles.login__form__title}>Sign in to your account</h1>
-        <p className={styles.login__form__error}>{error}</p>
-
-        <form onSubmit={handleSubmit}>
-          <Input
-            label="Email"
-            name="email"
-            type="email"
-            placeholder="Jhon@gmail.com"
-          />
-          <Input
-            label="Password"
-            name="password"
-            type="password"
-            placeholder="**************"
-          />
-          <Button type="submit" disabled={loading} variant="primary">
-            {loading ? "Loading..." : "Login"}
-          </Button>
-        </form>
-
-        <Button
-          type="button"
-          className={styles.login__form__google}
-          onClick={() => signIn("google", { callbackUrl, redirect: false })}
-          variant="google"
-        >
-          <img
-            src="/google-icon.png"
-            alt="google-icon"
-            width={25}
-            height={25}
-          />
-          Login with Google
+    <AuthLayout
+      error={error}
+      title="Sign in to your account"
+      link="/auth/register"
+      linkText="Don't have an account? Sign up "
+    >
+      <form onSubmit={handleSubmit}>
+        <Input
+          label="Email"
+          name="email"
+          type="email"
+          placeholder="Jhon@gmail.com"
+        />
+        <Input
+          label="Password"
+          name="password"
+          type="password"
+          placeholder="**************"
+        />
+        <Button type="submit" disabled={loading} variant="primary">
+          {loading ? "Loading..." : "Login"}
         </Button>
-        <p className={styles.login__form__link}>
-          Don&apos;t have an account? Sign up{" "}
-          <Link href="/auth/register">here</Link>
-        </p>
-      </div>
-    </div>
+      </form>
+
+      <Button
+        type="button"
+        onClick={() => signIn("google", { callbackUrl, redirect: false })}
+        variant="google"
+      >
+        <Image
+          src="/google-icon.png"
+          alt="google-icon"
+          width={25}
+          height={25}
+        />
+        Login with Google
+      </Button>
+    </AuthLayout>
   );
 }

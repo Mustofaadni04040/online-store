@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import Input from "@/components/ui/input";
 import Button from "@/components/ui/button";
+import authServices from "@/services/auth";
+import AuthLayout from "@/components/layouts/AuthLayout";
 
 export default function RegisterView() {
   const { push } = useRouter();
@@ -23,63 +25,59 @@ export default function RegisterView() {
       password: form.password.value,
     };
 
-    const result = await fetch("/api/user/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+    try {
+      const result = await authServices.registerAccount(data);
 
-    if (result.status === 200) {
-      form.reset();
-      push("/auth/login");
-    } else {
-      setError("Email or password is already taken");
+      if (result.status === 200) {
+        form.reset();
+        push("/auth/login");
+      } else {
+        setError("Email or password is already taken");
+        setLoading(false);
+      }
+    } catch (error) {
       setLoading(false);
+      setError("Email or password is already taken");
     }
   };
 
   return (
-    <div className={styles.register}>
-      <div className={styles.register__form}>
-        <h1 className={styles.register__form__title}>Create an account</h1>
-        <p className={styles.register__form__error}>{error}</p>
+    <AuthLayout
+      title="Create an account"
+      link="/auth/login"
+      linkText="Have an account? Sign in "
+      error={error}
+    >
+      <form onSubmit={handleSubmit}>
+        <Input
+          label="Fullname"
+          name="fullname"
+          type="fullname"
+          placeholder="John Doe"
+        />
+        <Input
+          label="Email"
+          name="email"
+          type="email"
+          placeholder="Jhon@gmail.com"
+        />
+        <Input
+          label="Phone"
+          name="phone"
+          type="number"
+          placeholder="0898923527"
+        />
+        <Input
+          label="Password"
+          name="password"
+          type="password"
+          placeholder="**************"
+        />
 
-        <form onSubmit={handleSubmit}>
-          <Input
-            label="Fullname"
-            name="fullname"
-            type="fullname"
-            placeholder="John Doe"
-          />
-          <Input
-            label="Email"
-            name="email"
-            type="email"
-            placeholder="Jhon@gmail.com"
-          />
-          <Input
-            label="Phone"
-            name="phone"
-            type="number"
-            placeholder="0898923527"
-          />
-          <Input
-            label="Password"
-            name="password"
-            type="password"
-            placeholder="**************"
-          />
-
-          <Button type="submit" disabled={loading} variant="primary">
-            {loading ? "Loading..." : "Register"}
-          </Button>
-        </form>
-        <p className={styles.register__form__link}>
-          Have an account? Sign in <Link href="/auth/login">here</Link>
-        </p>
-      </div>
-    </div>
+        <Button type="submit" disabled={loading} variant="primary">
+          {loading ? "Loading..." : "Register"}
+        </Button>
+      </form>
+    </AuthLayout>
   );
 }
