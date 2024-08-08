@@ -2,6 +2,8 @@ import React, { FormEvent, useState } from "react";
 import styles from "./Register.module.scss";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import Input from "@/components/ui/input";
+import Button from "@/components/ui/button";
 
 export default function RegisterView() {
   const { push } = useRouter();
@@ -45,58 +47,34 @@ export default function RegisterView() {
         <p className={styles.register__form__error}>{error}</p>
 
         <form onSubmit={handleSubmit}>
-          <div className={styles.register__form__item}>
-            <label htmlFor="fullname">Fullname</label>
-            <input
-              name="fullname"
-              id="fullname"
-              type="text"
-              className={styles.register__form__item__input}
-              placeholder="jhoen doe"
-              required
-            />
-          </div>
-          <div className={styles.register__form__item}>
-            <label htmlFor="email">Email</label>
-            <input
-              name="email"
-              id="email"
-              type="email"
-              className={styles.register__form__item__input}
-              placeholder="jhoen@gmail.com"
-              required
-            />
-          </div>
-          <div className={styles.register__form__item}>
-            <label htmlFor="phone">Phone</label>
-            <input
-              name="phone"
-              id="phone"
-              type="text"
-              className={styles.register__form__item__input}
-              placeholder="0898923527"
-              required
-            />
-          </div>
-          <div className={styles.register__form__item}>
-            <label htmlFor="password">Password</label>
-            <input
-              name="password"
-              id="password"
-              type="password"
-              className={styles.register__form__item__input}
-              placeholder="**************"
-              required
-            />
-          </div>
+          <Input
+            label="Fullname"
+            name="fullname"
+            type="fullname"
+            placeholder="John Doe"
+          />
+          <Input
+            label="Email"
+            name="email"
+            type="email"
+            placeholder="Jhon@gmail.com"
+          />
+          <Input
+            label="Phone"
+            name="phone"
+            type="number"
+            placeholder="0898923527"
+          />
+          <Input
+            label="Password"
+            name="password"
+            type="password"
+            placeholder="**************"
+          />
 
-          <button
-            type="submit"
-            className={styles.register__form__button}
-            disabled={loading}
-          >
+          <Button type="submit" disabled={loading} variant="primary">
             {loading ? "Loading..." : "Register"}
-          </button>
+          </Button>
         </form>
         <p className={styles.register__form__link}>
           Have an account? Sign in <Link href="/auth/login">here</Link>

@@ -3,6 +3,8 @@ import styles from "./Login.module.scss";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
+import Input from "@/components/ui/input";
+import Button from "@/components/ui/button";
 
 export default function LoginView() {
   const { push, query } = useRouter();
@@ -48,41 +50,28 @@ export default function LoginView() {
         <p className={styles.login__form__error}>{error}</p>
 
         <form onSubmit={handleSubmit}>
-          <div className={styles.login__form__item}>
-            <label htmlFor="email">Email</label>
-            <input
-              name="email"
-              id="email"
-              type="email"
-              className={styles.login__form__item__input}
-              placeholder="jhoen@gmail.com"
-              required
-            />
-          </div>
-          <div className={styles.login__form__item}>
-            <label htmlFor="password">Password</label>
-            <input
-              name="password"
-              id="password"
-              type="password"
-              className={styles.login__form__item__input}
-              placeholder="**************"
-              required
-            />
-          </div>
-
-          <button
-            type="submit"
-            className={styles.login__form__button}
-            disabled={loading}
-          >
+          <Input
+            label="Email"
+            name="email"
+            type="email"
+            placeholder="Jhon@gmail.com"
+          />
+          <Input
+            label="Password"
+            name="password"
+            type="password"
+            placeholder="**************"
+          />
+          <Button type="submit" disabled={loading} variant="primary">
             {loading ? "Loading..." : "Login"}
-          </button>
+          </Button>
         </form>
-        <button
-          className={styles.login__form__google}
+
+        <Button
           type="button"
+          className={styles.login__form__google}
           onClick={() => signIn("google", { callbackUrl, redirect: false })}
+          variant="google"
         >
           <img
             src="/google-icon.png"
@@ -91,7 +80,7 @@ export default function LoginView() {
             height={25}
           />
           Login with Google
-        </button>
+        </Button>
         <p className={styles.login__form__link}>
           Don&apos;t have an account? Sign up{" "}
           <Link href="/auth/register">here</Link>
