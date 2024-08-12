@@ -1,0 +1,48 @@
+.sidebar {
+  background-color: #16a34a;
+  color: #fff;
+  padding: 20px;
+  width: 300px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  &__top {
+    &__title {
+      margin-bottom: 40px;
+      font-size: 24px;
+    }
+    &__lists {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      &__item {
+        padding: 10px 15px;
+        border-radius: 5px;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        &__icon {
+          font-size: 32px;
+          gap: 10px;
+        }
+        &:hover {
+          background-color: #097530;
+          transition-duration: 300ms;
+          cursor: pointer;
+        }
+        &__active {
+          background-color: #097530;
+          transition-duration: 300ms;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+  &__bottom {
+    &__button {
+      width: 100%;
+    }
+  }
+}
