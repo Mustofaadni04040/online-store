@@ -19,7 +19,7 @@ export default function Sidebar({ lists }: Proptypes) {
   return (
     <div className={styles.sidebar}>
       <div className={styles.sidebar__top}>
-        <h1 className={styles.sidebar__top__title}>musstore</h1>
+        <h1 className={styles.sidebar__top__title}>musstore.</h1>
         <div className={styles.sidebar__top__lists}>
           {lists.map((list, index) => (
             <Link
