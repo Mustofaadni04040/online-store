@@ -6,9 +6,18 @@ type Proptypes = {
   name: string;
   type: string;
   placeholder?: string;
+  defaultValue?: string;
+  disabled?: boolean;
 };
 
-export default function Input({ label, name, type, placeholder }: Proptypes) {
+export default function Input({
+  label,
+  name,
+  type,
+  placeholder,
+  defaultValue,
+  disabled,
+}: Proptypes) {
   return (
     <div className={styles.container}>
       {label && <label htmlFor={name}>{label}</label>}
@@ -18,6 +27,8 @@ export default function Input({ label, name, type, placeholder }: Proptypes) {
         type={type}
         className={styles.container__input}
         placeholder={placeholder}
+        defaultValue={defaultValue}
+        disabled={disabled}
         required
       />
     </div>
