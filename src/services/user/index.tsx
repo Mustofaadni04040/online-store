@@ -18,6 +18,12 @@ const userServices = {
         Authorization: `Bearer ${token}`,
       },
     }),
+  getProfile: (token: string) =>
+    instance.get("/api/user/profile", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
 };
 
 export default userServices;

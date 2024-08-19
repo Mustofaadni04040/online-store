@@ -41,7 +41,6 @@ export default function LoginView() {
     } catch (error) {
       setLoading(false);
       setError("Email or password is incorrect");
-      console.log(error);
     }
   };
 

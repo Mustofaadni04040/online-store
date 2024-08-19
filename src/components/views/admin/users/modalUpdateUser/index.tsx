@@ -30,7 +30,6 @@ export default function ModalUpdateUser({
         data,
         session.data?.accessToken
       );
-      console.log(result);
 
       if (result.status === 200) {
         setLoading(false);
