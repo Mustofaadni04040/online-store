@@ -1,18 +1,22 @@
 import AdminLayout from "@/components/layouts/AdminLayout";
 import Button from "@/components/ui/button";
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import styles from "./Users.module.scss";
 import ModalUpdateUser from "./modalUpdateUser";
 import ModalDeleteUser from "./modalDeleteUser";
+import { User } from "@/types/user.type";
+import { useSession } from "next-auth/react";
 
 type Proptypes = {
-  users: any;
+  users: User[];
+  setToaster: Dispatch<SetStateAction<{}>>;
 };
 
-export default function UsersAdminView({ users }: Proptypes) {
-  const [updatedUser, setUpdatedUser] = useState<any>({});
-  const [usersData, setUsersData] = useState<any>(users);
-  const [deletedUser, setDeletedUser] = useState<any>({});
+export default function UsersAdminView({ users, setToaster }: Proptypes) {
+  const [updatedUser, setUpdatedUser] = useState<User | {}>({});
+  const [deletedUser, setDeletedUser] = useState<User | {}>({});
+  const [usersData, setUsersData] = useState<User[]>([]);
+  const session: any = useSession();
 
   useEffect(() => {
     setUsersData(users);
@@ -36,7 +40,7 @@ export default function UsersAdminView({ users }: Proptypes) {
             </thead>
 
             <tbody>
-              {usersData.map((user: any, index: number) => {
+              {usersData.map((user: User, index: number) => {
                 return (
                   <tr key={user.id}>
                     <td>{index + 1}</td>
@@ -68,18 +72,22 @@ export default function UsersAdminView({ users }: Proptypes) {
           </table>
         </div>
       </AdminLayout>
-      {Object.keys(updatedUser).length && (
+      {Object.keys(updatedUser).length > 0 && (
         <ModalUpdateUser
           updatedUser={updatedUser}
           setUpdatedUser={setUpdatedUser}
           setUsersData={setUsersData}
+          setToaster={setToaster}
+          session={session}
         />
       )}
-      {Object.keys(deletedUser).length && (
+      {Object.keys(deletedUser).length > 0 && (
         <ModalDeleteUser
           deletedUser={deletedUser}
           setDeletedUser={setDeletedUser}
           setUsersData={setUsersData}
+          setToaster={setToaster}
+          session={session}
         />
       )}
     </>

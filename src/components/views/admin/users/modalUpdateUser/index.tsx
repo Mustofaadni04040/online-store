@@ -3,16 +3,27 @@ import Input from "@/components/ui/input";
 import Modal from "@/components/ui/modal";
 import Select from "@/components/ui/select";
 import userServices from "@/services/user";
+import { User } from "@/types/user.type";
 import { useSession } from "next-auth/react";
-import React, { FormEvent, useState } from "react";
+import React, { Dispatch, FormEvent, SetStateAction, useState } from "react";
+import styles from "./ModalUpdateUser.module.scss";
+
+type Proptypes = {
+  updatedUser: User | any;
+  setUpdatedUser: Dispatch<SetStateAction<{}>>;
+  setUsersData: Dispatch<SetStateAction<User[]>>;
+  setToaster: Dispatch<SetStateAction<{}>>;
+  session: any;
+};
 
 export default function ModalUpdateUser({
   updatedUser,
   setUpdatedUser,
   setUsersData,
-}: any) {
+  setToaster,
+  session,
+}: Proptypes) {
   const [loading, setLoading] = useState(false);
-  const session: any = useSession();
 
   const handleUpdateUser = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -36,11 +47,17 @@ export default function ModalUpdateUser({
         setUpdatedUser({});
         const { data } = await userServices.getAllUsers();
         setUsersData(data.data);
-      } else {
-        setLoading(false);
+        setToaster({
+          variant: "success",
+          message: "Success update user",
+        });
       }
     } catch (error) {
       setLoading(false);
+      setToaster({
+        variant: "danger",
+        message: "Failed update user",
+      });
     }
   };
 
@@ -82,7 +99,13 @@ export default function ModalUpdateUser({
           ]}
         />
 
-        <Button type="submit">Edit User</Button>
+        <Button
+          disabled={loading}
+          type="submit"
+          className={styles.modal__button}
+        >
+          {loading ? "Loading..." : "Update User"}
+        </Button>
       </form>
     </Modal>
   );

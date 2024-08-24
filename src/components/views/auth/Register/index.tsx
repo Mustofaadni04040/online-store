@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from "react";
+import React, { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import styles from "./Register.module.scss";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -7,13 +7,15 @@ import Button from "@/components/ui/button";
 import authServices from "@/services/auth";
 import AuthLayout from "@/components/layouts/AuthLayout";
 
-export default function RegisterView() {
+export default function RegisterView({
+  setToaster,
+}: {
+  setToaster: Dispatch<SetStateAction<{}>>;
+}) {
   const { push } = useRouter();
-  const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError("");
     setLoading(true);
 
     const form = e.target as HTMLFormElement;
@@ -31,13 +33,24 @@ export default function RegisterView() {
       if (result.status === 200) {
         form.reset();
         push("/auth/login");
+        setToaster({
+          variant: "success",
+          message: "Register success, please login",
+        });
+        setLoading(false);
       } else {
-        setError("Email or password is already taken");
+        setToaster({
+          variant: "danger",
+          message: "something went wrong",
+        });
         setLoading(false);
       }
     } catch (error) {
       setLoading(false);
-      setError("Email or password is already taken");
+      setToaster({
+        variant: "danger",
+        message: "Email or password is already taken",
+      });
     }
   };
 
@@ -46,7 +59,7 @@ export default function RegisterView() {
       title="Create an account"
       link="/auth/login"
       linkText="Have an account? Sign in "
-      error={error}
+      setToaster={setToaster}
     >
       <form onSubmit={handleSubmit}>
         <Input

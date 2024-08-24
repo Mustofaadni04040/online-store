@@ -1,22 +1,53 @@
 import Button from "@/components/ui/button";
 import Modal from "@/components/ui/modal";
 import userServices from "@/services/user";
-import React from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import styles from "./ModalDeleteUser.module.scss";
 import { useSession } from "next-auth/react";
+import { User } from "@/types/user.type";
+
+type Proptypes = {
+  deletedUser: User | any;
+  setDeletedUser: Dispatch<SetStateAction<{}>>;
+  setUsersData: Dispatch<SetStateAction<User[]>>;
+  setToaster: Dispatch<SetStateAction<{}>>;
+  session: any;
+};
 
 export default function ModalDeleteUser({
   deletedUser,
   setDeletedUser,
   setUsersData,
-}: any) {
-  const session: any = useSession();
+  setToaster,
+  session,
+}: Proptypes) {
+  const [loading, setLoading] = useState(false);
 
   const handleDeleteUser = async () => {
-    userServices.deleteUser(deletedUser.id, session.data?.accessToken);
-    setDeletedUser({});
-    const { data } = await userServices.getAllUsers();
-    setUsersData(data.data);
+    setLoading(true);
+
+    try {
+      const result = await userServices.deleteUser(
+        deletedUser.id,
+        session.data?.accessToken
+      );
+      if (result.status === 200) {
+        setLoading(false);
+        setDeletedUser({});
+        const { data } = await userServices.getAllUsers();
+        setUsersData(data.data);
+        setToaster({
+          variant: "success",
+          message: "Success delete user",
+        });
+      }
+    } catch (error) {
+      setLoading(false);
+      setToaster({
+        variant: "danger",
+        message: "Failed delete user",
+      });
+    }
   };
   return (
     <Modal onClose={() => setDeletedUser({})}>
@@ -25,8 +56,9 @@ export default function ModalDeleteUser({
         type="button"
         onClick={() => handleDeleteUser()}
         className={styles.modal__button}
+        disabled={loading}
       >
-        Delete
+        {loading ? "Loading..." : "Yes, delete"}
       </Button>
     </Modal>
   );

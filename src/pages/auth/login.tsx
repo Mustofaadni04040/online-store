@@ -1,10 +1,14 @@
 import LoginView from "@/components/views/auth/login";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 
-export default function LoginPage() {
+export default function LoginPage({
+  setToaster,
+}: {
+  setToaster: Dispatch<SetStateAction<{}>>;
+}) {
   return (
     <>
-      <LoginView />
+      <LoginView setToaster={setToaster} />
     </>
   );
 }

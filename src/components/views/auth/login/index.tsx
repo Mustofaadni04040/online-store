@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from "react";
+import React, { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import styles from "./Login.module.scss";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -8,16 +8,18 @@ import Button from "@/components/ui/button";
 import AuthLayout from "@/components/layouts/AuthLayout";
 import Image from "next/image";
 
-export default function LoginView() {
+export default function LoginView({
+  setToaster,
+}: {
+  setToaster: Dispatch<SetStateAction<{}>>;
+}) {
   const { push, query } = useRouter();
-  const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
   const callbackUrl: any = query.callbackUrl || "/";
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError("");
     setLoading(true);
 
     const form = e.target as HTMLFormElement;
@@ -34,22 +36,32 @@ export default function LoginView() {
         setLoading(false);
         form.reset();
         push(callbackUrl);
+        setToaster({
+          variant: "success",
+          message: "Login success",
+        });
       } else {
         setLoading(false);
-        setError("Email or password is incorrect");
+        setToaster({
+          variant: "danger",
+          message: "Email or password is incorrect",
+        });
       }
     } catch (error) {
       setLoading(false);
-      setError("Email or password is incorrect");
+      setToaster({
+        variant: "danger",
+        message: "Something went wrong",
+      });
     }
   };
 
   return (
     <AuthLayout
-      error={error}
       title="Sign in to your account"
       link="/auth/register"
       linkText="Don't have an account? Sign up "
+      setToaster={setToaster}
     >
       <form onSubmit={handleSubmit}>
         <Input
