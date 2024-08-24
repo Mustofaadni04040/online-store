@@ -4,7 +4,6 @@ import Modal from "@/components/ui/modal";
 import Select from "@/components/ui/select";
 import userServices from "@/services/user";
 import { User } from "@/types/user.type";
-import { useSession } from "next-auth/react";
 import React, { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import styles from "./ModalUpdateUser.module.scss";
 

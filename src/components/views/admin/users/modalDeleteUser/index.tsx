@@ -3,7 +3,6 @@ import Modal from "@/components/ui/modal";
 import userServices from "@/services/user";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import styles from "./ModalDeleteUser.module.scss";
-import { useSession } from "next-auth/react";
 import { User } from "@/types/user.type";
 
 type Proptypes = {
