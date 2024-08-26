@@ -8,6 +8,7 @@ type Proptypes = {
   placeholder?: string;
   defaultValue?: string;
   disabled?: boolean;
+  onChange?: (e: any) => void;
 };
 
 export default function Input({
@@ -17,6 +18,7 @@ export default function Input({
   placeholder,
   defaultValue,
   disabled,
+  onChange,
 }: Proptypes) {
   return (
     <div className={styles.container}>
@@ -29,6 +31,7 @@ export default function Input({
         placeholder={placeholder}
         defaultValue={defaultValue}
         disabled={disabled}
+        onChange={onChange}
         required
       />
     </div>

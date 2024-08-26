@@ -5,6 +5,7 @@ import styles from "./Products.module.scss";
 import Image from "next/image";
 import { convertIDR } from "@/utils/currency";
 import { Product } from "@/types/product.type";
+import ModalAddProduct from "./modalAddProduct";
 
 type Proptypes = {
   products: Product[];
@@ -13,7 +14,7 @@ type Proptypes = {
 
 export default function ProductsAdminView({ products, setToaster }: Proptypes) {
   const [productsData, setProductsData] = useState<Product[]>([]);
-  console.log(productsData);
+  const [modalAddProduct, setModalAddProduct] = useState(false);
 
   useEffect(() => {
     setProductsData(products);
@@ -24,6 +25,13 @@ export default function ProductsAdminView({ products, setToaster }: Proptypes) {
       <AdminLayout>
         <div className={styles.products}>
           <h1>Products Management</h1>
+          <Button
+            type="button"
+            className={styles.products__add}
+            onClick={() => setModalAddProduct(true)}
+          >
+            <i className="bx bx-plus"></i>Add Product
+          </Button>
           <table className={styles.products__table}>
             <thead>
               <tr>
@@ -91,6 +99,13 @@ export default function ProductsAdminView({ products, setToaster }: Proptypes) {
           </table>
         </div>
       </AdminLayout>
+      {modalAddProduct && (
+        <ModalAddProduct
+          setModalAddProduct={setModalAddProduct}
+          setToaster={setToaster}
+          setProductsData={setProductsData}
+        />
+      )}
     </>
   );
 }

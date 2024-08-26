@@ -13,6 +13,12 @@
     padding: 20px;
     width: 50vw;
     max-height: 80vh;
+    overflow-y: auto;
     border-radius: 7px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 }
