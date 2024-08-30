@@ -2,10 +2,13 @@ import Button from "@/components/ui/button";
 import Input from "@/components/ui/input";
 import Modal from "@/components/ui/modal";
 import Select from "@/components/ui/select";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import styles from "./ModalAddProduct.module.scss";
 import { Product } from "@/types/product.type";
 import InputFile from "@/components/ui/inputFile";
+import productServices from "@/services/product";
+import { useSession } from "next-auth/react";
+import { uploadFile } from "@/lib/firebase/service";
 
 type Proptypes = {
   setModalAddProduct: Dispatch<SetStateAction<boolean>>;
@@ -21,6 +24,7 @@ export default function ModalAddProduct({
   const [loading, setLoading] = useState(false);
   const [stockCount, setStockCount] = useState([{ size: "", qty: 0 }]);
   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
+  const session: any = useSession();
 
   const handleStock = (e: any, index: number, type: string) => {
     const newStockCount: any = [...stockCount];
@@ -28,17 +32,95 @@ export default function ModalAddProduct({
     setStockCount(newStockCount);
   };
 
+  const uploadImage = (id: string, form: any) => {
+    const file = form.image.files[0];
+    const newName = "main." + file.name.split(".")[1];
+
+    if (file) {
+      uploadFile(
+        id,
+        file,
+        newName,
+        "products",
+        async (status: boolean, newImageURL: string) => {
+          if (status) {
+            const data = {
+              image: newImageURL,
+            };
+            const result = await productServices.updateProduct(
+              id,
+              data,
+              session.data?.accessToken
+            );
+            if (result.status === 200) {
+              setLoading(false);
+              setUploadedImage(null);
+              form.reset();
+              setModalAddProduct(false);
+              const { data } = await productServices.getAllProducts();
+              setProductsData(data.data);
+              setToaster({
+                variant: "success",
+                message: "Success add product",
+              });
+            } else {
+              setLoading(false);
+              setToaster({
+                variant: "danger",
+                message: "Failed add product",
+              });
+            }
+          } else {
+            setLoading(false);
+            setToaster({
+              variant: "danger",
+              message: "Failed add product",
+            });
+          }
+        }
+      );
+    }
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    const form: any = e.target as HTMLFormElement;
+    const data = {
+      name: form.name.value,
+      price: form.price.value,
+      category: form.category.value,
+      status: form.status.value,
+      stock: stockCount,
+      image: "",
+    };
+
+    const result = await productServices.addProduct(
+      data,
+      session.data?.accessToken
+    );
+
+    if (result.status === 200) {
+      uploadImage(result.data.data.id, form);
+    }
+  };
+
   return (
     <Modal onClose={() => setModalAddProduct(false)}>
       <h1>Add Product</h1>
-      <form onSubmit={() => {}} className={styles.form}>
+      <form onSubmit={handleSubmit} className={styles.form}>
         <Input
           label="Name"
           name="name"
           type="text"
           placeholder="Insert product name"
         />
-        <Input label="Price" name="price" type="number" />
+        <Input
+          label="Price"
+          name="price"
+          type="number"
+          placeholder="Insert product price"
+        />
         <Select
           name="category"
           label="Category"

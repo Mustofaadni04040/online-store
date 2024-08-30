@@ -107,14 +107,15 @@ export async function deleteData(
 }
 
 export async function uploadFile(
-  userid: string,
+  id: string,
   file: any,
+  newName: string,
+  collection: string,
   callback: Function
 ) {
   if (file) {
     if (file.size < 1048576) {
-      const newName = "profile." + file.name.split(".")[1];
-      const storageRef = ref(storage, `images/users/${userid}/${newName}`);
+      const storageRef = ref(storage, `images/${collection}/${id}/${newName}`);
       const uploadTask = uploadBytesResumable(storageRef, file);
       uploadTask.on(
         "state_changed",
