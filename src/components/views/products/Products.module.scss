@@ -1,0 +1,55 @@
+.products {
+  &__main {
+    display: flex;
+    gap: 10px;
+    &__filter {
+      width: 25%;
+      height: 100vh;
+      padding: 80px 40px;
+      &__data {
+        padding: 20px 0;
+        border-bottom: 1px solid #dee2e6;
+        &__title {
+          font-size: 22px;
+          font-weight: 600;
+          margin-bottom: 20px;
+        }
+        &__gender {
+          font-size: 18px;
+          font-weight: 600;
+        }
+        &__list {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+          margin-top: 10px;
+          &__item {
+            display: flex;
+            align-items: center;
+            &__label {
+              font-size: 16px;
+              margin-left: 10px;
+              cursor: pointer;
+              font-weight: 600;
+            }
+            &__checkbox {
+              width: 20px;
+              height: 20px;
+              cursor: pointer;
+            }
+          }
+        }
+      }
+    }
+    &__content {
+      padding: 150px 20px 20px 0;
+      width: 100%;
+      height: 100vh;
+      overflow-y: auto;
+      display: grid;
+      gap: 20px;
+      grid-template-columns: repeat(3, 1fr);
+      row-gap: 60px;
+    }
+  }
+}

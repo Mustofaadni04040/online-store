@@ -3,7 +3,7 @@ import Input from "@/components/ui/input";
 import Modal from "@/components/ui/modal";
 import Select from "@/components/ui/select";
 import React, { Dispatch, FormEvent, SetStateAction, useState } from "react";
-import styles from "./ModalAddProduct.module.scss";
+import styles from "./ModalUpdateProduct.module.scss";
 import { Product } from "@/types/product.type";
 import InputFile from "@/components/ui/inputFile";
 import productServices from "@/services/product";
@@ -12,20 +12,23 @@ import { uploadFile } from "@/lib/firebase/service";
 import Image from "next/image";
 
 type Proptypes = {
-  setModalAddProduct: Dispatch<SetStateAction<boolean>>;
+  setUpdatedProduct: Dispatch<SetStateAction<boolean>>;
   setToaster: Dispatch<SetStateAction<{}>>;
   setProductsData: Dispatch<SetStateAction<Product[]>>;
+  updatedProduct: Product | any;
 };
 
-export default function ModalAddProduct({
-  setModalAddProduct,
+export default function ModalUpdateProduct({
+  setUpdatedProduct,
+  updatedProduct,
   setToaster,
   setProductsData,
 }: Proptypes) {
   const [loading, setLoading] = useState(false);
-  const [stockCount, setStockCount] = useState([{ size: "", qty: 0 }]);
+  const [stockCount, setStockCount] = useState(updatedProduct.stock);
   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
   const session: any = useSession();
+  console.log(updatedProduct);
 
   const handleStock = (e: any, index: number, type: string) => {
     const newStockCount: any = [...stockCount];
@@ -33,53 +36,34 @@ export default function ModalAddProduct({
     setStockCount(newStockCount);
   };
 
-  const uploadImage = (id: string, form: any) => {
-    const file = form.image.files[0];
-    const newName = "main." + file.name.split(".")[1];
-
-    if (file) {
-      uploadFile(
-        id,
-        file,
-        newName,
-        "products",
-        async (status: boolean, newImageURL: string) => {
-          if (status) {
-            const data = {
-              image: newImageURL,
-            };
-            const result = await productServices.updateProduct(
-              id,
-              data,
-              session.data?.accessToken
-            );
-            if (result.status === 200) {
-              setLoading(false);
-              setUploadedImage(null);
-              form.reset();
-              setModalAddProduct(false);
-              const { data } = await productServices.getAllProducts();
-              setProductsData(data.data);
-              setToaster({
-                variant: "success",
-                message: "Success add product",
-              });
-            } else {
-              setLoading(false);
-              setToaster({
-                variant: "danger",
-                message: "Failed add product",
-              });
-            }
-          } else {
-            setLoading(false);
-            setToaster({
-              variant: "danger",
-              message: "Failed add product",
-            });
-          }
-        }
-      );
+  const updateProduct = async (
+    form: any,
+    newImageURL: string = updatedProduct.image
+  ) => {
+    const data = {
+      name: form.name.value,
+      price: form.price.value,
+      category: form.category.value,
+      status: form.status.value,
+      stock: stockCount,
+      image: newImageURL,
+    };
+    const result = await productServices.updateProduct(
+      updatedProduct.id,
+      data,
+      session.data?.accessToken
+    );
+    if (result.status === 200) {
+      setLoading(false);
+      setUploadedImage(null);
+      form.reset();
+      setUpdatedProduct(false);
+      const { data } = await productServices.getAllProducts();
+      setProductsData(data.data);
+      setToaster({
+        variant: "success",
+        message: "Success update product",
+      });
     }
   };
 
@@ -87,40 +71,50 @@ export default function ModalAddProduct({
     e.preventDefault();
     setLoading(true);
     const form: any = e.target as HTMLFormElement;
-    const data = {
-      name: form.name.value,
-      price: form.price.value,
-      category: form.category.value,
-      status: form.status.value,
-      stock: stockCount,
-      image: "",
-    };
 
-    const result = await productServices.addProduct(
-      data,
-      session.data?.accessToken
-    );
+    const file = form.image.files[0];
 
-    if (result.status === 200) {
-      uploadImage(result.data.data.id, form);
+    if (file) {
+      const newName = "main." + file.name.split(".")[1];
+      uploadFile(
+        updatedProduct.id,
+        file,
+        newName,
+        "products",
+        async (status: boolean, newImageURL: string) => {
+          if (status) {
+            updateProduct(form, newImageURL);
+          } else {
+            setLoading(false);
+            setToaster({
+              variant: "danger",
+              message: "Failed upload image",
+            });
+          }
+        }
+      );
+    } else {
+      updateProduct(form);
     }
   };
 
   return (
-    <Modal onClose={() => setModalAddProduct(false)}>
-      <h1>Add Product</h1>
+    <Modal onClose={() => setUpdatedProduct(false)}>
+      <h1>Update Product</h1>
       <form onSubmit={handleSubmit} className={styles.form}>
         <Input
           label="Name"
           name="name"
           type="text"
           placeholder="Insert product name"
+          defaultValue={updatedProduct.name}
         />
         <Input
           label="Price"
           name="price"
           type="number"
           placeholder="Insert product price"
+          defaultValue={updatedProduct.price}
         />
         <Select
           name="category"
@@ -129,6 +123,7 @@ export default function ModalAddProduct({
             { label: "Men", value: "men" },
             { label: "Women", value: "women" },
           ]}
+          defaultValue={updatedProduct.category}
         />
         <Select
           name="status"
@@ -137,7 +132,30 @@ export default function ModalAddProduct({
             { label: "Released", value: "true" },
             { label: "Not Released", value: "false" },
           ]}
+          defaultValue={updatedProduct.status}
         />
+
+        <label htmlFor="image">Image</label>
+        <div className={styles.form__image}>
+          <Image
+            width={200}
+            height={200}
+            src={
+              uploadedImage
+                ? URL.createObjectURL(uploadedImage)
+                : updatedProduct.image
+            }
+            alt={updatedProduct.name}
+            className={styles.form__image__preview}
+          />
+
+          <InputFile
+            name="image"
+            uploadedImage={uploadedImage}
+            setUploadedImage={setUploadedImage}
+          />
+        </div>
+
         <label htmlFor="stock">Stock</label>
         {stockCount.map(
           (item: { size: string; qty: number }, index: number) => (
@@ -151,6 +169,7 @@ export default function ModalAddProduct({
                   onChange={(e) => {
                     handleStock(e, index, "size");
                   }}
+                  defaultValue={item.size}
                 />
               </div>
               <div className={styles.form__stock__item}>
@@ -162,6 +181,7 @@ export default function ModalAddProduct({
                   onChange={(e) => {
                     handleStock(e, index, "qty");
                   }}
+                  defaultValue={item.qty}
                 />
               </div>
             </div>
@@ -175,33 +195,12 @@ export default function ModalAddProduct({
           Add new stock
         </Button>
 
-        <label htmlFor="image">Image</label>
-        <div className={styles.form__image}>
-          {uploadedImage ? (
-            <Image
-              width={200}
-              height={200}
-              src={URL.createObjectURL(uploadedImage)}
-              alt="product-image"
-              className={styles.form__image__preview}
-            />
-          ) : (
-            <div className={styles.form__image__placeholder}>No Image</div>
-          )}
-
-          <InputFile
-            name="image"
-            uploadedImage={uploadedImage}
-            setUploadedImage={setUploadedImage}
-          />
-        </div>
-
         <Button
           disabled={loading}
           type="submit"
           className={styles.form__submit}
         >
-          {loading ? "Loading..." : "Add Product"}
+          {loading ? "Loading..." : "Update Product"}
         </Button>
       </form>
     </Modal>
