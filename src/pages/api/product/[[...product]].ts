@@ -1,4 +1,9 @@
-import { addData, retrieveData, updateData } from "@/lib/firebase/service";
+import {
+  addData,
+  deleteData,
+  retrieveData,
+  updateData,
+} from "@/lib/firebase/service";
 import type { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
 
@@ -78,6 +83,35 @@ export default async function handler(
           res
             .status(403)
             .json({ status: false, statusCode: 403, message: "Access denied" });
+        }
+      }
+    );
+  } else if (req.method === "DELETE") {
+    const { product }: any = req.query;
+    const token = req.headers.authorization?.split(" ")[1] || "";
+    console.log(product);
+    jwt.verify(
+      token,
+      process.env.NEXTAUTH_SECRET || "",
+      async (err: any, decoded: any) => {
+        if (decoded && decoded.role === "admin") {
+          await deleteData("products", product[0], (result: boolean) => {
+            if (result) {
+              res
+                .status(200)
+                .json({ status: true, statusCode: 200, message: "Success" });
+            } else {
+              res
+                .status(400)
+                .json({ status: false, statusCode: 400, message: "Failed" });
+            }
+          });
+        } else {
+          res.status(403).json({
+            status: false,
+            statusCode: 403,
+            message: "Access denied",
+          });
         }
       }
     );
