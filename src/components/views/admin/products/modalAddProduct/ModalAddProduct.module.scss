@@ -1,10 +1,14 @@
 .form {
   &__stock {
     display: flex;
+    align-items: center;
     width: 100%;
     gap: 20px;
     &__item {
       width: 50%;
+      &__input {
+        margin: 20px 0;
+      }
     }
     &__button {
       max-width: fit-content;
@@ -13,6 +17,15 @@
       border-radius: 20px;
       margin: 10px 0 20px 0;
     }
+  }
+  &__label {
+    margin-top: 10px;
+  }
+  &__input {
+    margin: 20px 0;
+  }
+  &__select {
+    margin-bottom: 10px;
   }
   &__image {
     display: flex;
@@ -40,5 +53,7 @@
   }
   &__submit {
     margin-top: 15px;
+    padding: 10px;
+    border-radius: 5px;
   }
 }

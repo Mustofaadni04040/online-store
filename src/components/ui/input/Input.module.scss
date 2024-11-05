@@ -1,11 +1,12 @@
 .container {
   display: flex;
   flex-direction: column;
-  margin: 20px 0;
+  &__label {
+    margin-bottom: 5px;
+  }
   &__input {
     padding: 10px;
     background-color: #fff;
-    margin-top: 5px;
     border-radius: 7px;
     border: 1px solid #cbd5e1;
     outline: none;

@@ -1,5 +1,11 @@
 import MemberLayout from "@/components/layouts/MemberLayout";
-import React, { Dispatch, FormEvent, SetStateAction, useState } from "react";
+import React, {
+  Dispatch,
+  FormEvent,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import styles from "./Profile.module.scss";
 import Input from "@/components/ui/input";
 import Button from "@/components/ui/button";
@@ -9,20 +15,21 @@ import userServices from "@/services/user";
 import { User } from "@/types/user.type";
 
 type Proptypes = {
-  profile: User | any;
-  setProfile: Dispatch<SetStateAction<{}>>;
-  session: any;
   setToaster: Dispatch<SetStateAction<{}>>;
 };
 
-export default function ProfileMemberView({
-  profile,
-  setProfile,
-  session,
-  setToaster,
-}: Proptypes) {
+export default function ProfileMemberView({ setToaster }: Proptypes) {
   const [changeImage, setChangeImage] = useState<File | any>({});
   const [loading, setLoading] = useState("");
+  const [profile, setProfile] = useState<User | any>({});
+  const getProfile = async () => {
+    const { data } = await userServices.getProfile();
+    setProfile(data.data);
+  };
+
+  useEffect(() => {
+    getProfile();
+  }, []);
 
   const handleChangeProfile = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -36,10 +43,7 @@ export default function ProfileMemberView({
       phone: form.phone.value,
     };
 
-    const result = await userServices.updateProfile(
-      data,
-      session.data?.accessToken
-    );
+    const result = await userServices.updateProfile(data);
 
     if (result.status === 200) {
       setLoading("");
@@ -79,10 +83,7 @@ export default function ProfileMemberView({
             };
 
             try {
-              const result = await userServices.updateProfile(
-                data,
-                session.data?.accessToken
-              );
+              const result = await userServices.updateProfile(data);
 
               if (result.status === 200) {
                 setLoading("");
@@ -128,10 +129,7 @@ export default function ProfileMemberView({
     };
 
     try {
-      const result = await userServices.updateProfile(
-        data,
-        session.data?.accessToken
-      );
+      const result = await userServices.updateProfile(data);
 
       if (result.status === 200) {
         setLoading("");
@@ -157,7 +155,7 @@ export default function ProfileMemberView({
       <div className={styles.profile__main}>
         <div className={styles.profile__main__row}>
           <div className={styles.profile__main__row__avatar}>
-            <h2 className={styles.profile__main__row__avatar__title}>Avatar</h2>
+            <h3 className={styles.profile__main__row__avatar__title}>Avatar</h3>
             {profile.image ? (
               <Image
                 src={profile.image}
@@ -175,6 +173,7 @@ export default function ProfileMemberView({
                   alt="user-profile"
                   width={150}
                   height={150}
+                  priority
                   className={styles.profile__main__row__avatar__image}
                 />
               </div>
@@ -218,15 +217,19 @@ export default function ProfileMemberView({
             </form>
           </div>
           <div className={styles.profile__main__row__profile}>
-            <h2 className={styles.profile__main__row__profile__title}>
+            <h3 className={styles.profile__main__row__profile__title}>
               Profile
-            </h2>
-            <form onSubmit={handleChangeProfile}>
+            </h3>
+            <form
+              onSubmit={handleChangeProfile}
+              className={styles.profile__main__row__profile__form}
+            >
               <Input
                 label="Fullname"
                 type="text"
                 name="fullname"
                 defaultValue={profile.fullname}
+                classname={styles.profile__main__row__profile__form__input}
               />
               <Input
                 label="Email"
@@ -234,6 +237,7 @@ export default function ProfileMemberView({
                 name="email"
                 defaultValue={profile.email}
                 disabled
+                classname={styles.profile__main__row__profile__form__input}
               />
               <Input
                 label="Role"
@@ -241,6 +245,7 @@ export default function ProfileMemberView({
                 name="role"
                 defaultValue={profile.role}
                 disabled
+                classname={styles.profile__main__row__profile__form__input}
               />
               <Input
                 label="Phone"
@@ -248,21 +253,33 @@ export default function ProfileMemberView({
                 name="phone"
                 defaultValue={profile.phone}
                 placeholder="Input your phone number"
+                classname={styles.profile__main__row__profile__form__input}
               />
-              <Button type="submit" variant="primary">
+              <Button
+                type="submit"
+                variant="primary"
+                className={styles.profile__main__row__profile__form__button}
+                disabled={loading === "profile"}
+              >
                 {loading === "profile" ? "Loading..." : "Update Profile"}
               </Button>
             </form>
           </div>
           <div className={styles.profile__main__row__password}>
-            <h2>Change Password</h2>
-            <form onSubmit={handleChangePassword}>
+            <h3 className={styles.profile__main__row__password__title}>
+              Change Password
+            </h3>
+            <form
+              onSubmit={handleChangePassword}
+              className={styles.profile__main__row__password__form}
+            >
               <Input
                 name="old-password"
                 type="password"
                 label="Old Password"
                 disabled={profile.type === "google"}
                 placeholder="Enter your old password"
+                classname={styles.profile__main__row__password__form__input}
               />
               <Input
                 name="new-password"
@@ -270,6 +287,7 @@ export default function ProfileMemberView({
                 label="New Password"
                 disabled={profile.type === "google"}
                 placeholder="Enter your new password"
+                classname={styles.profile__main__row__password__form__input}
               />
               <Button
                 type="submit"

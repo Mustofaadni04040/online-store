@@ -16,7 +16,6 @@ export default function UsersAdminView({ users, setToaster }: Proptypes) {
   const [updatedUser, setUpdatedUser] = useState<User | {}>({});
   const [deletedUser, setDeletedUser] = useState<User | {}>({});
   const [usersData, setUsersData] = useState<User[]>([]);
-  const session: any = useSession();
 
   useEffect(() => {
     setUsersData(users);
@@ -53,6 +52,7 @@ export default function UsersAdminView({ users, setToaster }: Proptypes) {
                         <Button
                           type="button"
                           onClick={() => setUpdatedUser(user)}
+                          className={styles.users__table__action__button}
                         >
                           <i className="bx bxs-edit" />
                         </Button>
@@ -60,6 +60,7 @@ export default function UsersAdminView({ users, setToaster }: Proptypes) {
                           type="button"
                           variant="danger"
                           onClick={() => setDeletedUser(user)}
+                          className={styles.users__table__action__button}
                         >
                           <i className="bx bxs-trash" />
                         </Button>
@@ -78,7 +79,6 @@ export default function UsersAdminView({ users, setToaster }: Proptypes) {
           setUpdatedUser={setUpdatedUser}
           setUsersData={setUsersData}
           setToaster={setToaster}
-          session={session}
         />
       )}
       {Object.keys(deletedUser).length > 0 && (
@@ -87,7 +87,6 @@ export default function UsersAdminView({ users, setToaster }: Proptypes) {
           setDeletedUser={setDeletedUser}
           setUsersData={setUsersData}
           setToaster={setToaster}
-          session={session}
         />
       )}
     </>

@@ -9,6 +9,7 @@ type Proptypes = {
   defaultValue?: string | number;
   disabled?: boolean;
   onChange?: (e: any) => void;
+  classname?: string;
 };
 
 export default function Input({
@@ -19,10 +20,15 @@ export default function Input({
   defaultValue,
   disabled,
   onChange,
+  classname,
 }: Proptypes) {
   return (
-    <div className={styles.container}>
-      {label && <label htmlFor={name}>{label}</label>}
+    <div className={`${styles.container} ${classname}`}>
+      {label && (
+        <label htmlFor={name} className={styles.container__label}>
+          {label}
+        </label>
+      )}
       <input
         name={name}
         id={name}

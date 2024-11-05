@@ -48,11 +48,8 @@ export default function ModalAddProduct({
             const data = {
               image: newImageURL,
             };
-            const result = await productServices.updateProduct(
-              id,
-              data,
-              session.data?.accessToken
-            );
+            // setelah upload image mengupdate data
+            const result = await productServices.updateProduct(id, data);
             if (result.status === 200) {
               setLoading(false);
               setUploadedImage(null);
@@ -86,20 +83,26 @@ export default function ModalAddProduct({
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+    const stock = stockCount.map((stock) => {
+      return {
+        size: stock.size,
+        qty: parseInt(`${stock.qty}`),
+      };
+    });
     const form: any = e.target as HTMLFormElement;
     const data = {
       name: form.name.value,
-      price: form.price.value,
+      price: parseInt(form.price.value),
+      description: form.description.value,
       category: form.category.value,
       status: form.status.value,
-      stock: stockCount,
+      stock: stock,
       image: "",
     };
 
-    const result = await productServices.addProduct(
-      data,
-      session.data?.accessToken
-    );
+    console.log(data);
+
+    const result = await productServices.addProduct(data);
 
     if (result.status === 200) {
       uploadImage(result.data.data.id, form);
@@ -115,12 +118,21 @@ export default function ModalAddProduct({
           name="name"
           type="text"
           placeholder="Insert product name"
+          classname={styles.form__input}
+        />
+        <Input
+          label="Description"
+          name="description"
+          type="text"
+          placeholder="Insert product description"
+          classname={styles.form__input}
         />
         <Input
           label="Price"
           name="price"
           type="number"
           placeholder="Insert product price"
+          classname={styles.form__input}
         />
         <Select
           name="category"
@@ -129,6 +141,7 @@ export default function ModalAddProduct({
             { label: "Men", value: "men" },
             { label: "Women", value: "women" },
           ]}
+          className={styles.form__select}
         />
         <Select
           name="status"
@@ -137,8 +150,33 @@ export default function ModalAddProduct({
             { label: "Released", value: "true" },
             { label: "Not Released", value: "false" },
           ]}
+          className={styles.form__select}
         />
-        <label htmlFor="stock">Stock</label>
+
+        <label htmlFor="image">Image</label>
+        <div className={styles.form__image}>
+          {uploadedImage ? (
+            <Image
+              width={200}
+              height={200}
+              src={URL.createObjectURL(uploadedImage)}
+              alt="product-image"
+              className={styles.form__image__preview}
+            />
+          ) : (
+            <div className={styles.form__image__placeholder}>No Image</div>
+          )}
+
+          <InputFile
+            name="image"
+            uploadedImage={uploadedImage}
+            setUploadedImage={setUploadedImage}
+          />
+        </div>
+
+        <label htmlFor="stock" className={styles.form__label}>
+          Stock
+        </label>
         {stockCount.map(
           (item: { size: string; qty: number }, index: number) => (
             <div className={styles.form__stock} key={index}>
@@ -148,6 +186,7 @@ export default function ModalAddProduct({
                   name="size"
                   type="text"
                   placeholder="Insert product size"
+                  classname={styles.form__stock__item__input}
                   onChange={(e) => {
                     handleStock(e, index, "size");
                   }}
@@ -174,27 +213,6 @@ export default function ModalAddProduct({
         >
           Add new stock
         </Button>
-
-        <label htmlFor="image">Image</label>
-        <div className={styles.form__image}>
-          {uploadedImage ? (
-            <Image
-              width={200}
-              height={200}
-              src={URL.createObjectURL(uploadedImage)}
-              alt="product-image"
-              className={styles.form__image__preview}
-            />
-          ) : (
-            <div className={styles.form__image__placeholder}>No Image</div>
-          )}
-
-          <InputFile
-            name="image"
-            uploadedImage={uploadedImage}
-            setUploadedImage={setUploadedImage}
-          />
-        </div>
 
         <Button
           disabled={loading}

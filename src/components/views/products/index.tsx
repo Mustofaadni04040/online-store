@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./Products.module.scss";
 import { Product } from "@/types/product.type";
 import Card from "./Card";
+import Link from "next/link";
 
 type Proptypes = {
   products: Product[];
@@ -59,7 +60,9 @@ export default function ProductsView({ products }: Proptypes) {
         </div>
         <div className={styles.products__main__content}>
           {products.map((product) => (
-            <Card product={product} key={product.id} />
+            <Link key={product.id} href={`/products/${product.id}`}>
+              <Card product={product} />
+            </Link>
           ))}
         </div>
       </div>

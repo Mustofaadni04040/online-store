@@ -5,6 +5,9 @@
     gap: 20px;
     &__item {
       width: 50%;
+      &__input {
+        margin: 10px 0;
+      }
     }
     &__button {
       max-width: fit-content;
@@ -13,6 +16,10 @@
       border-radius: 20px;
       margin: 10px 0 20px 0;
     }
+  }
+  &__input,
+  &__select {
+    margin: 20px 0;
   }
   &__image {
     display: flex;
@@ -28,5 +35,7 @@
   }
   &__submit {
     margin-top: 15px;
+    padding: 10px 15px;
+    border-radius: 5px;
   }
 }

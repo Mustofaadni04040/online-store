@@ -27,10 +27,7 @@ export default function ModalDeleteProduct({
     setLoading(true);
 
     try {
-      const result = await productServices.deleteProduct(
-        deletedProduct.id,
-        session.data?.accessToken
-      );
+      const result = await productServices.deleteProduct(deletedProduct.id);
       if (result.status === 200) {
         setLoading(false);
         deleteFile(

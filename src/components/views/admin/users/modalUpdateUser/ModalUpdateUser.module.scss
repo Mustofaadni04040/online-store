@@ -1,6 +1,15 @@
+.title {
+  margin-bottom: 20px;
+}
 .modal__button {
+  padding: 10px;
+  border-radius: 5px;
   :disabled {
     cursor: not-allowed;
     opacity: 0.5;
   }
+}
+.input,
+.select {
+  margin: 10px 0;
 }

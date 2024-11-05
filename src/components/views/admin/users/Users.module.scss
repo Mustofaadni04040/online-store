@@ -22,6 +22,10 @@
     &__action {
       display: flex;
       gap: 10px;
+      &__button {
+        padding: 10px;
+        border-radius: 5px;
+      }
     }
   }
 }

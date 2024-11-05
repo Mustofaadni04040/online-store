@@ -40,19 +40,22 @@ export default function ModalUpdateProduct({
     form: any,
     newImageURL: string = updatedProduct.image
   ) => {
+    const stock = stockCount.map((stock: { size: string; qty: number }) => {
+      return {
+        size: stock.size,
+        qty: parseInt(`${stock.qty}`),
+      };
+    });
     const data = {
       name: form.name.value,
-      price: form.price.value,
+      price: parseInt(form.price.value),
+      description: form.description.value,
       category: form.category.value,
       status: form.status.value,
-      stock: stockCount,
+      stock: stock,
       image: newImageURL,
     };
-    const result = await productServices.updateProduct(
-      updatedProduct.id,
-      data,
-      session.data?.accessToken
-    );
+    const result = await productServices.updateProduct(updatedProduct.id, data);
     if (result.status === 200) {
       setLoading(false);
       setUploadedImage(null);
@@ -108,6 +111,15 @@ export default function ModalUpdateProduct({
           type="text"
           placeholder="Insert product name"
           defaultValue={updatedProduct.name}
+          classname={styles.form__input}
+        />
+        <Input
+          label="Description"
+          name="description"
+          type="text"
+          placeholder="Insert product description"
+          defaultValue={updatedProduct.description}
+          classname={styles.form__input}
         />
         <Input
           label="Price"
@@ -115,6 +127,7 @@ export default function ModalUpdateProduct({
           type="number"
           placeholder="Insert product price"
           defaultValue={updatedProduct.price}
+          classname={styles.form__input}
         />
         <Select
           name="category"
@@ -124,6 +137,7 @@ export default function ModalUpdateProduct({
             { label: "Women", value: "women" },
           ]}
           defaultValue={updatedProduct.category}
+          className={styles.form__select}
         />
         <Select
           name="status"
@@ -133,6 +147,7 @@ export default function ModalUpdateProduct({
             { label: "Not Released", value: "false" },
           ]}
           defaultValue={updatedProduct.status}
+          className={styles.form__select}
         />
 
         <label htmlFor="image">Image</label>
@@ -170,6 +185,7 @@ export default function ModalUpdateProduct({
                     handleStock(e, index, "size");
                   }}
                   defaultValue={item.size}
+                  classname={styles.form__stock__item__input}
                 />
               </div>
               <div className={styles.form__stock__item}>
@@ -182,6 +198,7 @@ export default function ModalUpdateProduct({
                     handleStock(e, index, "qty");
                   }}
                   defaultValue={item.qty}
+                  classname={styles.form__stock__item__input}
                 />
               </div>
             </div>

@@ -5,6 +5,8 @@
     align-items: center;
     gap: 7px;
     max-width: 150px;
+    padding: 10px;
+    border-radius: 5px;
     i {
       font-size: 24px;
       font-weight: bold;
@@ -31,6 +33,10 @@
     &__action {
       display: flex;
       gap: 10px;
+      &__button {
+        padding: 10px;
+        border-radius: 5px;
+      }
     }
   }
 }

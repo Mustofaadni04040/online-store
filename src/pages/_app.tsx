@@ -1,10 +1,9 @@
 import Navbar from "@/components/fragments/Navbar";
 import Toaster from "@/components/ui/Toaster";
-import "@/styles/globals.css";
+import "@/styles/globals.scss";
 import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
 import { Lato } from "next/font/google";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -32,12 +31,6 @@ export default function App({
 
   return (
     <SessionProvider session={session}>
-      <Head>
-        <link
-          href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
-          rel="stylesheet"
-        />
-      </Head>
       <div className={lato.className}>
         {!disabledNavbar.includes(pathname.split("/")[1]) && <Navbar />}
         <Component {...pageProps} setToaster={setToaster} />

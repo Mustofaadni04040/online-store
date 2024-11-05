@@ -12,7 +12,6 @@ type Proptypes = {
   setUpdatedUser: Dispatch<SetStateAction<{}>>;
   setUsersData: Dispatch<SetStateAction<User[]>>;
   setToaster: Dispatch<SetStateAction<{}>>;
-  session: any;
 };
 
 export default function ModalUpdateUser({
@@ -20,7 +19,6 @@ export default function ModalUpdateUser({
   setUpdatedUser,
   setUsersData,
   setToaster,
-  session,
 }: Proptypes) {
   const [loading, setLoading] = useState(false);
 
@@ -35,11 +33,7 @@ export default function ModalUpdateUser({
     };
 
     try {
-      const result = await userServices.updateUser(
-        updatedUser.id,
-        data,
-        session.data?.accessToken
-      );
+      const result = await userServices.updateUser(updatedUser.id, data);
 
       if (result.status === 200) {
         setLoading(false);
@@ -62,7 +56,7 @@ export default function ModalUpdateUser({
 
   return (
     <Modal onClose={() => setUpdatedUser({})}>
-      <h1>Update User</h1>
+      <h1 className={styles.title}>Update User</h1>
       <form onSubmit={handleUpdateUser}>
         <Input
           label="Fullname"
@@ -79,6 +73,7 @@ export default function ModalUpdateUser({
           placeholder="Jhon@gmail.com"
           defaultValue={updatedUser.email}
           disabled
+          classname={styles.input}
         />
         <Input
           label="Phone"
@@ -87,6 +82,7 @@ export default function ModalUpdateUser({
           placeholder="0898923527"
           defaultValue={updatedUser.phone}
           disabled
+          classname={styles.input}
         />
         <Select
           name="role"
@@ -96,6 +92,7 @@ export default function ModalUpdateUser({
             { label: "Member", value: "member" },
             { label: "Admin", value: "admin" },
           ]}
+          className={styles.select}
         />
 
         <Button

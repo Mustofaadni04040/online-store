@@ -20,6 +20,8 @@
         padding: 20px;
         &__image {
           border-radius: 50%;
+          object-fit: cover;
+          object-position: center;
         }
         &__label {
           margin-top: 20px;
@@ -42,10 +44,12 @@
         }
         &__button {
           margin-top: 20px;
-        }
-        &__button:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
+          padding: 10px;
+          border-radius: 5px;
+          &__:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
         }
         &__title {
           margin-bottom: 20px;
@@ -58,6 +62,22 @@
         border: 1px solid rgb(245, 245, 245);
         padding: 20px;
         border-radius: 7px;
+        &__title {
+          margin-bottom: 10px;
+        }
+        &__form {
+          &__input {
+            margin: 20px 0;
+          }
+          &__button {
+            padding: 10px;
+            border-radius: 5px;
+            &__:disabled {
+              opacity: 0.5;
+              cursor: not-allowed;
+            }
+          }
+        }
       }
       &__password {
         width: 25%;
@@ -66,9 +86,21 @@
         border: 1px solid rgb(245, 245, 245);
         border-radius: 7px;
         padding: 20px;
-        &__button:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
+        &__title {
+          margin-bottom: 10px;
+        }
+        &__button {
+          padding: 10px;
+          border-radius: 5px;
+          &__:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
+        }
+        &__form {
+          &__input {
+            margin: 20px 0;
+          }
         }
       }
     }

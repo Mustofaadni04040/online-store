@@ -10,7 +10,6 @@ type Proptypes = {
   setDeletedUser: Dispatch<SetStateAction<{}>>;
   setUsersData: Dispatch<SetStateAction<User[]>>;
   setToaster: Dispatch<SetStateAction<{}>>;
-  session: any;
 };
 
 export default function ModalDeleteUser({
@@ -18,7 +17,6 @@ export default function ModalDeleteUser({
   setDeletedUser,
   setUsersData,
   setToaster,
-  session,
 }: Proptypes) {
   const [loading, setLoading] = useState(false);
 
@@ -26,10 +24,7 @@ export default function ModalDeleteUser({
     setLoading(true);
 
     try {
-      const result = await userServices.deleteUser(
-        deletedUser.id,
-        session.data?.accessToken
-      );
+      const result = await userServices.deleteUser(deletedUser.id);
       if (result.status === 200) {
         setLoading(false);
         setDeletedUser({});

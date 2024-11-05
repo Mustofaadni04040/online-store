@@ -69,14 +69,21 @@ export default function LoginView({
           name="email"
           type="email"
           placeholder="Jhon@gmail.com"
+          classname={styles.input}
         />
         <Input
           label="Password"
           name="password"
           type="password"
           placeholder="**************"
+          classname={styles.input}
         />
-        <Button type="submit" disabled={loading} variant="primary">
+        <Button
+          type="submit"
+          disabled={loading}
+          variant="primary"
+          className={styles.button}
+        >
           {loading ? "Loading..." : "Login"}
         </Button>
       </form>
@@ -85,6 +92,7 @@ export default function LoginView({
         type="button"
         onClick={() => signIn("google", { callbackUrl, redirect: false })}
         variant="google"
+        className={styles.button}
       >
         <Image
           src="/google-icon.png"

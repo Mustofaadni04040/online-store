@@ -1,6 +1,12 @@
 import AdminLayout from "@/components/layouts/AdminLayout";
 import Button from "@/components/ui/button";
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, {
+  Dispatch,
+  Fragment,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import styles from "./Products.module.scss";
 import Image from "next/image";
 import { convertIDR } from "@/utils/currency";
@@ -55,8 +61,8 @@ export default function ProductsAdminView({ products, setToaster }: Proptypes) {
 
             <tbody>
               {productsData.map((product, index) => (
-                <>
-                  <tr key={product.id}>
+                <Fragment key={product.id}>
+                  <tr>
                     <td rowSpan={product.stock.length}>{index + 1}</td>
                     <td rowSpan={product.stock.length}>
                       <Image
@@ -79,6 +85,7 @@ export default function ProductsAdminView({ products, setToaster }: Proptypes) {
                         <Button
                           type="button"
                           onClick={() => setUpdatedProduct(product)}
+                          className={styles.products__table__action__button}
                         >
                           <i className="bx bxs-edit" />
                         </Button>
@@ -86,6 +93,7 @@ export default function ProductsAdminView({ products, setToaster }: Proptypes) {
                           type="button"
                           variant="danger"
                           onClick={() => setDeletedProduct(product)}
+                          className={styles.products__table__action__button}
                         >
                           <i className="bx bxs-trash" />
                         </Button>
@@ -94,17 +102,17 @@ export default function ProductsAdminView({ products, setToaster }: Proptypes) {
                   </tr>
                   {product.stock.map(
                     (stock: { size: string; qty: number }, index: number) => (
-                      <>
+                      <Fragment key={`${stock.size}-${stock.qty}`}>
                         {index > 0 && (
-                          <tr key={index}>
+                          <tr>
                             <td>{stock.size}</td>
                             <td>{stock.qty}</td>
                           </tr>
                         )}
-                      </>
+                      </Fragment>
                     )
                   )}
-                </>
+                </Fragment>
               ))}
             </tbody>
           </table>

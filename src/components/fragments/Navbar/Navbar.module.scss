@@ -1,17 +1,18 @@
 .navbar {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   width: 100%;
-  height: 70px;
-  padding: 0 15px;
-  background-color: #16a34a;
-  color: #fff;
+  height: 60px;
+  padding: 20px 2.5vw;
+  background-color: #fff;
+  color: #16a34a;
+  border-bottom: 1px solid var(--NN50, #f0f3f7);
   position: fixed;
   z-index: 100;
   &__button {
     background-color: #fff;
-    border: none;
+    border: 1px solid var(--NN50, #f0f3f7);
     outline: none;
     padding: 12px 16px;
     color: #16a34a;
@@ -20,6 +21,79 @@
     transition-duration: 300ms;
   }
   &__button:hover {
-    background-color: #eeeded;
+    background-color: #16a34a;
+    color: #fff;
+  }
+  &__nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: var(--NN600, #6d7588);
+    transition: 0.5s;
+    &__item {
+      font-size: 18px;
+      cursor: pointer;
+      font-weight: 400;
+      padding: 5px 0;
+      border-bottom: 2px solid transparent;
+      &__active {
+        border-bottom: 2px solid #16a34a;
+        color: #16a34a;
+      }
+    }
+    &__item:hover {
+      color: #16a34a;
+    }
+  }
+  &__user {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    &__cart {
+      &__icon {
+        font-size: 22px;
+        color: #000;
+        cursor: pointer;
+      }
+    }
+    &__profile {
+      position: relative;
+      &__image {
+        border-radius: 50px;
+        cursor: pointer;
+      }
+      &__info {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      &__dropdown {
+        position: absolute;
+        background-color: #fff;
+        box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.5);
+        top: 45px;
+        right: 0;
+        border-radius: 5px;
+        display: none;
+        flex-direction: column;
+        &__active {
+          display: flex;
+        }
+        &__item {
+          text-align: left;
+          width: 150px;
+          padding: 10px 20px;
+          background-color: transparent;
+          border: none;
+          font-size: 16px;
+          cursor: pointer;
+          transition-duration: 300ms;
+
+          &:hover {
+            background-color: #f3f3f3;
+          }
+        }
+      }
+    }
   }
 }

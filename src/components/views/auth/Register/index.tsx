@@ -67,27 +67,36 @@ export default function RegisterView({
           name="fullname"
           type="fullname"
           placeholder="John Doe"
+          classname={styles.input}
         />
         <Input
           label="Email"
           name="email"
           type="email"
           placeholder="Jhon@gmail.com"
+          classname={styles.input}
         />
         <Input
           label="Phone"
           name="phone"
           type="number"
           placeholder="0898923527"
+          classname={styles.input}
         />
         <Input
           label="Password"
           name="password"
           type="password"
           placeholder="**************"
+          classname={styles.input}
         />
 
-        <Button type="submit" disabled={loading} variant="primary">
+        <Button
+          type="submit"
+          disabled={loading}
+          variant="primary"
+          className={styles.button}
+        >
           {loading ? "Loading..." : "Register"}
         </Button>
       </form>
