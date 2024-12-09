@@ -1,20 +1,17 @@
-import React, { Dispatch, FormEvent, SetStateAction, useState } from "react";
+import React, { FormEvent, useContext, useState } from "react";
 import styles from "./Login.module.scss";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
 import Input from "@/components/ui/input";
 import Button from "@/components/ui/button";
 import AuthLayout from "@/components/layouts/AuthLayout";
 import Image from "next/image";
+import { ToasterContext } from "@/contexts/ToasterContext";
 
-export default function LoginView({
-  setToaster,
-}: {
-  setToaster: Dispatch<SetStateAction<{}>>;
-}) {
+export default function LoginView() {
   const { push, query } = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
+  const { setToaster } = useContext(ToasterContext);
 
   const callbackUrl: any = query.callbackUrl || "/";
 
@@ -61,7 +58,6 @@ export default function LoginView({
       title="Sign in to your account"
       link="/auth/register"
       linkText="Don't have an account? Sign up "
-      setToaster={setToaster}
     >
       <form onSubmit={handleSubmit}>
         <Input

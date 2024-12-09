@@ -52,7 +52,7 @@
     &__cart {
       &__icon {
         font-size: 22px;
-        color: #000;
+        color: #16a34a;
         cursor: pointer;
       }
     }
@@ -61,6 +61,10 @@
       &__image {
         border-radius: 50px;
         cursor: pointer;
+      }
+      &__icon {
+        cursor: pointer;
+        font-size: 22px;
       }
       &__info {
         display: flex;
@@ -80,6 +84,9 @@
           display: flex;
         }
         &__item {
+          display: flex;
+          align-items: center;
+          gap: 10px;
           text-align: left;
           width: 150px;
           padding: 10px 20px;

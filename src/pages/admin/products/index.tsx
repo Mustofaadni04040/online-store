@@ -2,7 +2,7 @@ import ProductsAdminView from "@/components/views/admin/products";
 import productServices from "@/services/product";
 import React, { useEffect, useState } from "react";
 
-export default function AdminProductsPage({ setToaster }: any) {
+export default function AdminProductsPage() {
   const [products, setProducts] = useState([]);
 
   const getAllProducts = async () => {
@@ -16,7 +16,7 @@ export default function AdminProductsPage({ setToaster }: any) {
 
   return (
     <>
-      <ProductsAdminView products={products} setToaster={setToaster} />
+      <ProductsAdminView products={products} />
     </>
   );
 }

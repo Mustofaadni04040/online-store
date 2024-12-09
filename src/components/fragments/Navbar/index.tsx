@@ -20,7 +20,6 @@ export default function Navbar() {
   const { data }: any = useSession();
   const { pathname } = useRouter();
   const [dropdownUser, setDropdownUser] = useState(false);
-  console.log(data);
 
   return (
     <div className={styles.navbar}>
@@ -50,7 +49,7 @@ export default function Navbar() {
           <div className={styles.navbar__user__profile}>
             {data?.user?.image ? (
               <div className={styles.navbar__user__profile__info}>
-                <p>Hi, {data?.user?.name.split(" ")[0].toLowerCase()}</p>
+                <p>Hi, {data?.user?.fullname.split(" ")[0].toLowerCase()}</p>
                 <Image
                   width={30}
                   height={30}
@@ -61,7 +60,13 @@ export default function Navbar() {
                 />
               </div>
             ) : (
-              <i className="bx bx-user" />
+              <div className={styles.navbar__user__profile__info}>
+                <p>Hi, {data?.user?.fullname.split(" ")[0].toLowerCase()}</p>
+                <i
+                  className={`bx bx-user ${styles.navbar__user__profile__icon}`}
+                  onClick={() => setDropdownUser(!dropdownUser)}
+                />
+              </div>
             )}
             <div
               className={`${styles.navbar__user__profile__dropdown} ${
@@ -72,6 +77,7 @@ export default function Navbar() {
                 <button
                   className={styles.navbar__user__profile__dropdown__item}
                 >
+                  <i className="bx bx-user" />
                   Profile
                 </button>
               </Link>
@@ -79,6 +85,7 @@ export default function Navbar() {
                 <button
                   className={styles.navbar__user__profile__dropdown__item}
                 >
+                  <i className="bx bx-heart" />
                   Favorites
                 </button>
               </Link>
@@ -86,6 +93,7 @@ export default function Navbar() {
                 className={styles.navbar__user__profile__dropdown__item}
                 onClick={() => signOut()}
               >
+                <i className="bx bx-log-out-circle" />
                 Logout
               </button>
             </div>

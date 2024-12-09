@@ -38,7 +38,7 @@ export default function Select({
           className={styles.select__container__input}
         >
           {options?.map((option: Option, index: number) => (
-            <option value={option.value} key={index} selected={option.selected}>
+            <option value={option.value} key={index}>
               {option.label}
             </option>
           ))}

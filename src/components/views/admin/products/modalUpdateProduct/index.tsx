@@ -2,18 +2,23 @@ import Button from "@/components/ui/button";
 import Input from "@/components/ui/input";
 import Modal from "@/components/ui/modal";
 import Select from "@/components/ui/select";
-import React, { Dispatch, FormEvent, SetStateAction, useState } from "react";
+import React, {
+  Dispatch,
+  FormEvent,
+  SetStateAction,
+  useContext,
+  useState,
+} from "react";
 import styles from "./ModalUpdateProduct.module.scss";
 import { Product } from "@/types/product.type";
 import InputFile from "@/components/ui/inputFile";
 import productServices from "@/services/product";
-import { useSession } from "next-auth/react";
 import { uploadFile } from "@/lib/firebase/service";
 import Image from "next/image";
+import { ToasterContext } from "@/contexts/ToasterContext";
 
 type Proptypes = {
   setUpdatedProduct: Dispatch<SetStateAction<boolean>>;
-  setToaster: Dispatch<SetStateAction<{}>>;
   setProductsData: Dispatch<SetStateAction<Product[]>>;
   updatedProduct: Product | any;
 };
@@ -21,14 +26,12 @@ type Proptypes = {
 export default function ModalUpdateProduct({
   setUpdatedProduct,
   updatedProduct,
-  setToaster,
   setProductsData,
 }: Proptypes) {
   const [loading, setLoading] = useState(false);
   const [stockCount, setStockCount] = useState(updatedProduct.stock);
   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
-  const session: any = useSession();
-  console.log(updatedProduct);
+  const { setToaster } = useContext(ToasterContext);
 
   const handleStock = (e: any, index: number, type: string) => {
     const newStockCount: any = [...stockCount];

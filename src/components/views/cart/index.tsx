@@ -1,4 +1,4 @@
-import React, { Dispatch, Fragment, SetStateAction } from "react";
+import React, { Fragment } from "react";
 import styles from "./Cart.module.scss";
 import { Product } from "@/types/product.type";
 import Image from "next/image";
@@ -8,14 +8,11 @@ import Input from "@/components/ui/input";
 import Button from "@/components/ui/button";
 
 type PropTypes = {
-  setToaster: Dispatch<SetStateAction<{}>>;
   cart: any;
   products: Product[];
 };
 
-export default function CartView({ setToaster, cart, products }: PropTypes) {
-  console.log(cart);
-
+export default function CartView({ cart, products }: PropTypes) {
   const getProduct = (id: string) => {
     const product = products.find((item) => item.id === id);
     return product;
@@ -23,8 +20,6 @@ export default function CartView({ setToaster, cart, products }: PropTypes) {
 
   const getOptionsSize = (id: string, selected: string) => {
     const product = products.find((item) => item.id === id);
-    console.log(product);
-
     const options = product?.stock.map(
       (stock: { size: string; qty: number }) => {
         if (stock.qty > 0) {
@@ -37,7 +32,6 @@ export default function CartView({ setToaster, cart, products }: PropTypes) {
       }
     );
     const data = options?.filter((option) => option !== undefined);
-    console.log(data);
     return data;
   };
 
@@ -51,85 +45,95 @@ export default function CartView({ setToaster, cart, products }: PropTypes) {
     );
     return totalCart;
   };
-  console.log(getTotalPrice());
 
   return (
     <div className={styles.cart}>
       <div className={styles.cart__main}>
         <h1 className={styles.cart__main__title}>Bag</h1>
         <div className={styles.cart__main__list}>
-          {cart.map(
-            (
-              item: { id: string; size: string; qty: number },
-              index: number
-            ) => (
-              <Fragment key={index}>
-                <div className={styles.cart__main__list__item}>
-                  {getProduct(item.id)?.image && (
-                    <div className={styles.cart__main__list__item__image}>
-                      <Image
-                        src={`${getProduct(item.id)?.image}`}
-                        alt={`${item.id}-${item.size}`}
-                        priority
-                        width={150}
-                        height={150}
-                        className={styles.cart__main__list__item__image__img}
-                      />
-                    </div>
-                  )}
-                  <div className={styles.cart__main__list__item__info}>
-                    <h4 className={styles.cart__main__list__item__info__title}>
-                      {getProduct(item.id)?.name}
-                    </h4>
-                    <p
-                      className={styles.cart__main__list__item__info__category}
-                    >
-                      {getProduct(item.id)?.category}
-                    </p>
-                    <div className={styles.cart__main__list__item__info__data}>
-                      <label
-                        className={
-                          styles.cart__main__list__item__info__data__size
-                        }
-                      >
-                        Size
-                        <Select
-                          name="size"
-                          options={getOptionsSize(item.id, item.size)}
+          {cart.length === 0 ? (
+            <p>You don&apos;t have any items in your bag</p>
+          ) : (
+            cart.map(
+              (
+                item: { id: string; size: string; qty: number },
+                index: number
+              ) => (
+                <Fragment key={index}>
+                  <div className={styles.cart__main__list__item}>
+                    {getProduct(item.id)?.image && (
+                      <div className={styles.cart__main__list__item__image}>
+                        <Image
+                          src={`${getProduct(item.id)?.image}`}
+                          alt={`${item.id}-${item.size}`}
+                          priority
+                          width={150}
+                          height={150}
+                          className={styles.cart__main__list__item__image__img}
                         />
-                      </label>
-                      <label
+                      </div>
+                    )}
+                    <div className={styles.cart__main__list__item__info}>
+                      <h4
+                        className={styles.cart__main__list__item__info__title}
+                      >
+                        {getProduct(item.id)?.name}
+                      </h4>
+                      <p
                         className={
-                          styles.cart__main__list__item__info__data__qty
+                          styles.cart__main__list__item__info__category
                         }
                       >
-                        Quantity
-                        <Input
-                          name="qty"
-                          type="number"
-                          defaultValue={item.qty}
-                          classname={
-                            styles.cart__main__list__item__info__data__qty__input
+                        {getProduct(item.id)?.category}
+                      </p>
+                      <div
+                        className={styles.cart__main__list__item__info__data}
+                      >
+                        <label
+                          className={
+                            styles.cart__main__list__item__info__data__size
                           }
-                        />
-                      </label>
-                      <button
-                        type="button"
-                        onClick={() => {}}
-                        className={
-                          styles.cart__main__list__item__info__data__delete
-                        }
-                      >
-                        <i className="bx bx-trash" />
-                      </button>
+                        >
+                          Size
+                          <Select
+                            name="size"
+                            options={getOptionsSize(item.id, item.size)}
+                            defaultValue={item.size}
+                          />
+                        </label>
+                        <label
+                          className={
+                            styles.cart__main__list__item__info__data__qty
+                          }
+                        >
+                          Quantity
+                          <Input
+                            name="qty"
+                            type="number"
+                            defaultValue={item.qty}
+                            classname={
+                              styles.cart__main__list__item__info__data__qty__input
+                            }
+                          />
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => {}}
+                          className={
+                            styles.cart__main__list__item__info__data__delete
+                          }
+                        >
+                          <i className="bx bx-trash" />
+                        </button>
+                      </div>
                     </div>
+                    <h4 className={styles.cart__main__list__item__price}>
+                      {convertIDR(getProduct(item.id)?.price)}
+                    </h4>
                   </div>
-                  <h4 className={styles.cart__main__list__item__price}>
-                    {convertIDR(getProduct(item.id)?.price)}
-                  </h4>
-                </div>
-                <hr className={styles.cart__main__list__divider} />
-              </Fragment>
+                  <hr className={styles.cart__main__list__divider} />
+                </Fragment>
+              )
             )
           )}
         </div>

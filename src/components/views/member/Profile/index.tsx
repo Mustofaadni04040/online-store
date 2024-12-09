@@ -3,6 +3,7 @@ import React, {
   Dispatch,
   FormEvent,
   SetStateAction,
+  useContext,
   useEffect,
   useState,
 } from "react";
@@ -13,15 +14,13 @@ import Image from "next/image";
 import { uploadFile } from "@/lib/firebase/service";
 import userServices from "@/services/user";
 import { User } from "@/types/user.type";
+import { ToasterContext } from "@/contexts/ToasterContext";
 
-type Proptypes = {
-  setToaster: Dispatch<SetStateAction<{}>>;
-};
-
-export default function ProfileMemberView({ setToaster }: Proptypes) {
+export default function ProfileMemberView() {
   const [changeImage, setChangeImage] = useState<File | any>({});
   const [loading, setLoading] = useState("");
   const [profile, setProfile] = useState<User | any>({});
+  const { setToaster } = useContext(ToasterContext);
   const getProfile = async () => {
     const { data } = await userServices.getProfile();
     setProfile(data.data);

@@ -5,17 +5,14 @@ import { Product } from "@/types/product.type";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
-type PropTypes = {
-  setToaster: Dispatch<SetStateAction<{}>>;
-};
-
-export default function DetailProductPage({ setToaster }: PropTypes) {
+export default function DetailProductPage() {
   const { id } = useRouter().query;
   const session: any = useSession();
   const [product, setProduct] = useState<Product | {}>([{}]);
   const [cart, setCart] = useState([]);
+  console.log(cart);
 
   const getDetailProduct = async (id: string) => {
     const { data } = await productServices.getDetailProduct(id);
@@ -42,12 +39,7 @@ export default function DetailProductPage({ setToaster }: PropTypes) {
       <Head>
         <title>Product Detail</title>
       </Head>
-      <DetailProductView
-        product={product}
-        cart={cart}
-        productId={id}
-        setToaster={setToaster}
-      />
+      <DetailProductView product={product} cart={cart} productId={id} />
     </>
   );
 }

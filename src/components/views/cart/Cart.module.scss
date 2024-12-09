@@ -2,6 +2,7 @@
   padding: 100px 15vw;
   display: flex;
   gap: 40px;
+  position: relative;
   &__main {
     width: 70%;
     &__title {
@@ -79,7 +80,9 @@
     }
   }
   &__summary {
-    width: 30%;
+    width: 25%;
+    position: fixed;
+    right: 100px;
     &__title {
       font-weight: 500;
       font-size: 24px;

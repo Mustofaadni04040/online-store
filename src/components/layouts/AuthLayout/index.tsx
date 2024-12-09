@@ -7,7 +7,6 @@ type Proptypes = {
   children: React.ReactNode;
   link: string;
   linkText?: string;
-  setToaster: Dispatch<SetStateAction<{}>>;
 };
 
 export default function AuthLayout({
@@ -15,7 +14,6 @@ export default function AuthLayout({
   children,
   link,
   linkText,
-  setToaster,
 }: Proptypes) {
   return (
     <div className={styles.auth}>

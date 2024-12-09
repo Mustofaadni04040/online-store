@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { useContext, useState } from "react";
 import styles from "./DetailProduct.module.scss";
 import { Product } from "@/types/product.type";
 import Image from "next/image";
@@ -7,23 +7,24 @@ import Button from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import userServices from "@/services/user";
+import { ToasterContext } from "@/contexts/ToasterContext";
 
 type PropTypes = {
   product: Product | any;
   cart: any;
   productId: string | string[] | undefined;
-  setToaster: Dispatch<SetStateAction<{}>>;
 };
 
 export default function DetailProductView({
   product,
   cart,
   productId,
-  setToaster,
 }: PropTypes) {
   const { status }: any = useSession();
   const router = useRouter();
   const [selectedSize, setSelectedSize] = useState("");
+  const { setToaster } = useContext(ToasterContext);
+  console.log(cart);
 
   const handleAddToCart = async () => {
     if (selectedSize !== "") {

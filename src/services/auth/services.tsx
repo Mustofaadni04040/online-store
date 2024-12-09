@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 
 // sign up firebase
 export async function signUp(
+  // menambahakan field di fireabase
   userData: {
     email: string;
     fullname: string;
@@ -12,6 +13,7 @@ export async function signUp(
     created_at?: Date;
     updated_at?: Date;
     image?: string;
+    carts?: Array<{ id: string; size: string; qty: number }>;
   },
   callback: Function
 ) {
@@ -27,6 +29,7 @@ export async function signUp(
     userData.password = await bcrypt.hash(userData.password, 10);
     userData.created_at = new Date();
     userData.updated_at = new Date();
+    userData.carts = [];
 
     addData("users", userData, (result: boolean) => {
       callback(result);
