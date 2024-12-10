@@ -61,6 +61,8 @@
       &__image {
         border-radius: 50px;
         cursor: pointer;
+        object-fit: cover;
+        object-position: center;
       }
       &__icon {
         cursor: pointer;

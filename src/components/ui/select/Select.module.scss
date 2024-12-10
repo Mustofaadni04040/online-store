@@ -13,6 +13,9 @@
       color: #64748b;
       background-color: transparent;
       cursor: pointer;
+      &:disabled {
+        cursor: auto;
+      }
     }
   }
 }

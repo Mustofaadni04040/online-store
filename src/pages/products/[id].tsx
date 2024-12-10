@@ -39,7 +39,12 @@ export default function DetailProductPage() {
       <Head>
         <title>Product Detail</title>
       </Head>
-      <DetailProductView product={product} cart={cart} productId={id} />
+      <DetailProductView
+        product={product}
+        cart={cart}
+        productId={id}
+        setCart={setCart}
+      />
     </>
   );
 }

@@ -17,7 +17,8 @@ export default function Card({ product }: Proptypes) {
         width={300}
         height={300}
         className={styles.card__image}
-        priority
+        placeholder="blur"
+        blurDataURL={product.image}
       />
       <h4 className={styles.card__title}>{product.name}</h4>
       <p className={styles.card__category}>{product.category}</p>

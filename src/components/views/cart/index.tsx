@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import styles from "./Cart.module.scss";
 import { Product } from "@/types/product.type";
 import Image from "next/image";
@@ -6,13 +6,40 @@ import { convertIDR } from "@/utils/currency";
 import Select from "@/components/ui/select";
 import Input from "@/components/ui/input";
 import Button from "@/components/ui/button";
+import userServices from "@/services/user";
+import { ToasterContext } from "@/contexts/ToasterContext";
+import { useSession } from "next-auth/react";
+import productServices from "@/services/product";
 
-type PropTypes = {
-  cart: any;
-  products: Product[];
-};
+export default function CartView() {
+  const { setToaster } = useContext(ToasterContext);
 
-export default function CartView({ cart, products }: PropTypes) {
+  const [cart, setCart] = useState([]);
+  const session: any = useSession();
+  const [products, setProducts] = useState<Product[]>([]);
+
+  // allproducts api
+  const getAllProducts = async () => {
+    const { data } = await productServices.getAllProducts();
+    setProducts(data.data);
+  };
+
+  useEffect(() => {
+    getAllProducts();
+  }, []);
+
+  // cart api
+  const getCart = async () => {
+    const { data } = await userServices.getCart();
+    setCart(data.data);
+  };
+
+  useEffect(() => {
+    if (session.data?.accessToken) {
+      getCart();
+    }
+  }, [session]);
+
   const getProduct = (id: string) => {
     const product = products.find((item) => item.id === id);
     return product;
@@ -46,13 +73,40 @@ export default function CartView({ cart, products }: PropTypes) {
     return totalCart;
   };
 
+  const handleDeleteCart = async (id: string, size: string) => {
+    const newCart = cart.filter((item: { id: string; size: string }) => {
+      return item.id !== id || item.size !== size;
+    });
+
+    try {
+      const result = await userServices.addToCart({
+        carts: newCart,
+      });
+
+      if (result.status === 200) {
+        setCart(newCart);
+        setToaster({
+          variant: "success",
+          message: "Success delete item from cart",
+        });
+      }
+    } catch (error) {
+      setToaster({
+        variant: "danger",
+        message: "Failed delete item from cart",
+      });
+    }
+  };
+
   return (
     <div className={styles.cart}>
       <div className={styles.cart__main}>
         <h1 className={styles.cart__main__title}>Bag</h1>
         <div className={styles.cart__main__list}>
           {cart.length === 0 ? (
-            <p>You don&apos;t have any items in your bag</p>
+            <p className={styles.cart__main__list__empty}>
+              You don&apos;t have any items in your bag
+            </p>
           ) : (
             cart.map(
               (
@@ -66,7 +120,8 @@ export default function CartView({ cart, products }: PropTypes) {
                         <Image
                           src={`${getProduct(item.id)?.image}`}
                           alt={`${item.id}-${item.size}`}
-                          priority
+                          placeholder="blur"
+                          blurDataURL={`${getProduct(item.id)?.image}`}
                           width={150}
                           height={150}
                           className={styles.cart__main__list__item__image__img}
@@ -96,9 +151,11 @@ export default function CartView({ cart, products }: PropTypes) {
                         >
                           Size
                           <Select
+                            key={item.id + item.size}
                             name="size"
                             options={getOptionsSize(item.id, item.size)}
                             defaultValue={item.size}
+                            disabled
                           />
                         </label>
                         <label
@@ -108,17 +165,19 @@ export default function CartView({ cart, products }: PropTypes) {
                         >
                           Quantity
                           <Input
+                            key={item.id + item.qty}
                             name="qty"
                             type="number"
                             defaultValue={item.qty}
                             classname={
                               styles.cart__main__list__item__info__data__qty__input
                             }
+                            disabled
                           />
                         </label>
                         <button
                           type="button"
-                          onClick={() => {}}
+                          onClick={() => handleDeleteCart(item.id, item.size)}
                           className={
                             styles.cart__main__list__item__info__data__delete
                           }
@@ -155,7 +214,7 @@ export default function CartView({ cart, products }: PropTypes) {
         <hr className={styles.cart__main__list__divider} />
         <div className={styles.cart__summary__item}>
           <h4>Total</h4>
-          <p>{convertIDR(0)}</p>
+          <p>{convertIDR(getTotalPrice())}</p>
         </div>
         <hr className={styles.cart__main__list__divider} />
         <Button type="button" className={styles.cart__summary__checkout}>

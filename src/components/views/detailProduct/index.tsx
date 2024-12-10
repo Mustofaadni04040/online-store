@@ -13,12 +13,14 @@ type PropTypes = {
   product: Product | any;
   cart: any;
   productId: string | string[] | undefined;
+  setCart: any;
 };
 
 export default function DetailProductView({
   product,
   cart,
   productId,
+  setCart,
 }: PropTypes) {
   const { status }: any = useSession();
   const router = useRouter();
@@ -51,6 +53,7 @@ export default function DetailProductView({
         ];
       }
       try {
+        setCart(newCart);
         const result = await userServices.addToCart({
           carts: newCart,
         });
