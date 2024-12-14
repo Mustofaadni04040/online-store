@@ -10,6 +10,7 @@ import userServices from "@/services/user";
 import { ToasterContext } from "@/contexts/ToasterContext";
 import { useSession } from "next-auth/react";
 import productServices from "@/services/product";
+import Link from "next/link";
 
 export default function CartView() {
   const { setToaster } = useContext(ToasterContext);
@@ -218,7 +219,7 @@ export default function CartView() {
         </div>
         <hr className={styles.cart__main__list__divider} />
         <Button type="button" className={styles.cart__summary__checkout}>
-          Checkout
+          <Link href={"/checkout"}>Checkout</Link>
         </Button>
       </div>
     </div>
