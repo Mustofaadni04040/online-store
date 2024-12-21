@@ -9,18 +9,76 @@
     &__title {
       margin-bottom: 20px;
     }
-    &__selected {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
+    &__item {
+      position: relative;
       border: 1px solid #ddd;
       padding: 20px;
       border-radius: 8px;
       cursor: pointer;
+      &__info {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+      &__btn {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        display: flex;
+        gap: 10px;
+        &__delete,
+        &__update,
+        &__main {
+          cursor: pointer;
+          color: #a5a5a5;
+          background-color: transparent;
+          border: none;
+          outline: none;
+          font-size: 24px;
+          &:hover {
+            i {
+              color: #807f7f;
+              transition-duration: 300ms;
+            }
+          }
+        }
+      }
     }
     &--active {
       border-radius: 8px;
       border: 1px solid #16a34a;
+    }
+  }
+  &__btnAdd {
+    width: fit-content;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  &__btnCancel {
+    width: fit-content;
+    background-color: #ef4444;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    &:hover {
+      background-color: #dc2626;
+    }
+  }
+  &__add {
+    margin-top: 20px;
+    &__form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      &__btn {
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 5px;
+        &:disabled {
+          opacity: 50%;
+        }
+      }
     }
   }
 }

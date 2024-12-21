@@ -34,13 +34,16 @@ export default function CheckoutView() {
     const { data } = await userServices.getProfile();
     setProfile(data.data);
 
-    data.data.address.filter((address: { isMain: boolean }, index: number) => {
-      if (address?.isMain) {
-        setSelectedAddress(index);
-      }
-    });
+    if (data?.data?.address?.length > 0) {
+      data?.data?.address?.filter(
+        (address: { isMain: boolean }, index: number) => {
+          if (address?.isMain) {
+            setSelectedAddress(index);
+          }
+        }
+      );
+    }
   };
-  console.log(profile);
 
   useEffect(() => {
     if (session.data?.accessToken) {
@@ -73,25 +76,37 @@ export default function CheckoutView() {
             <h3 className={styles.checkout__main__address__title}>
               Shipping Address
             </h3>
-            <div className={styles.checkout__main__address__selected}>
-              <h4 className={styles.checkout__main__address__selected__title}>
-                {profile?.address?.[selectedAddress]?.recipient} -{" "}
-                {profile?.address?.[selectedAddress]?.phone}
-              </h4>
-              <p className={styles.checkout__main__address__selected__address}>
-                {profile?.address?.[selectedAddress]?.addressLine}
-              </p>
-              <p className={styles.checkout__main__address__selected__note}>
-                Note: {profile?.address?.[selectedAddress]?.note}
-              </p>
+            {profile?.address?.length > 0 ? (
+              <div className={styles.checkout__main__address__selected}>
+                <h4 className={styles.checkout__main__address__selected__title}>
+                  {profile.address[selectedAddress].recipient} -{" "}
+                  {profile.address[selectedAddress].phone}
+                </h4>
+                <p
+                  className={styles.checkout__main__address__selected__address}
+                >
+                  {profile.address[selectedAddress].addressLine}
+                </p>
+                <p className={styles.checkout__main__address__selected__note}>
+                  Note: {profile.address[selectedAddress].note}
+                </p>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={() => setChangeAddress(true)}
+                >
+                  Change Address
+                </Button>
+              </div>
+            ) : (
               <Button
                 type="button"
-                variant="secondary"
+                className={styles.checkout__main__address__btnAdd}
                 onClick={() => setChangeAddress(true)}
               >
-                Change Address
+                Add new address
               </Button>
-            </div>
+            )}
           </div>
           <div className={styles.checkout__main__list}>
             {profile?.carts?.length === 0 ? (
@@ -197,7 +212,8 @@ export default function CheckoutView() {
       </div>
       {changeAddress && (
         <ModalChangeAddress
-          address={profile?.address}
+          profile={profile}
+          setProfile={setProfile}
           setChangeAddress={setChangeAddress}
           setSelectedAddress={setSelectedAddress}
           selectedAddress={selectedAddress}

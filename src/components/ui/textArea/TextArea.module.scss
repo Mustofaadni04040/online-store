@@ -1,0 +1,31 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  &__label {
+    margin-bottom: 5px;
+  }
+  &__input {
+    height: 100px;
+    resize: none;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 7px;
+    border: 1px solid #cbd5e1;
+    outline: none;
+    color: #64748b;
+  }
+  &__input:focus {
+    border: 1px solid #16a34a;
+  }
+  &__input:disabled {
+    opacity: 0.6;
+  }
+
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+  }
+}
