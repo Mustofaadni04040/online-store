@@ -97,6 +97,9 @@
       margin-top: 20px;
       border-radius: 50px;
       padding: 18px 24px;
+      &:disabled {
+        opacity: 50%;
+      }
     }
   }
 }

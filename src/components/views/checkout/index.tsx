@@ -9,15 +9,23 @@ import { ToasterContext } from "@/contexts/ToasterContext";
 import { useSession } from "next-auth/react";
 import productServices from "@/services/product";
 import ModalChangeAddress from "./modalChangeAddress";
+import Script from "next/script";
+import transactionServices from "@/services/transaction";
+
+declare global {
+  interface Window {
+    snap: any;
+  }
+}
 
 export default function CheckoutView() {
   const { setToaster } = useContext(ToasterContext);
-
   const [profile, setProfile] = useState<any>([]);
   const session: any = useSession();
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedAddress, setSelectedAddress] = useState(0);
   const [changeAddress, setChangeAddress] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // allproducts api
   const getAllProducts = async () => {
@@ -67,8 +75,44 @@ export default function CheckoutView() {
     return totalCart;
   };
 
+  const handleChecout = async () => {
+    setLoading(true);
+    try {
+      const payload = {
+        user: {
+          fullname: profile?.fullname,
+          email: profile?.email,
+          address: profile?.address[selectedAddress],
+        },
+        transaction: {
+          items: profile?.carts,
+          total: getTotalPrice(),
+        },
+      };
+      const data = await transactionServices.generateTransaction(payload);
+      console.log(data);
+
+      if (data.status === 200) {
+        window.snap.pay(data.data.data.token);
+      }
+    } catch (error) {
+      console.log(error);
+      setToaster({
+        variant: "danger",
+        message: "Failed process payment, try again later...",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
+      <Script
+        src={process.env.NEXT_PUBLIC_MIDTRANS_SNAP_URL}
+        data-client-key={process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY}
+        strategy="lazyOnload"
+      />
       <div className={styles.checkout}>
         <div className={styles.checkout__main}>
           <h1 className={styles.checkout__main__title}>Checkout</h1>
@@ -205,8 +249,13 @@ export default function CheckoutView() {
             <p>{convertIDR(getTotalPrice())}</p>
           </div>
           <hr className={styles.checkout__main__list__divider} />
-          <Button type="button" className={styles.checkout__summary__checkout}>
-            Process Payment
+          <Button
+            type="button"
+            className={styles.checkout__summary__checkout}
+            onClick={() => handleChecout()}
+            disabled={loading}
+          >
+            {loading ? "loading..." : "Process Payment"}
           </Button>
         </div>
       </div>

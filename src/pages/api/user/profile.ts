@@ -50,3 +50,9 @@ export default async function handler(
     responseApiNotAllowed(res);
   }
 }
+
+export const config = {
+  api: {
+    externalResolver: true,
+  },
+};
