@@ -1,0 +1,44 @@
+.orders {
+  &__table {
+    width: 100%;
+    border-spacing: 0;
+    border-collapse: collapse;
+    border: 1px solid #dee2e6;
+    margin-top: 30px;
+    th,
+    td {
+      text-align: left;
+      padding: 8px;
+      border-right: 1px solid #dee2e6;
+    }
+    thead {
+      tr {
+        background-color: #f2f2f2;
+      }
+    }
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+    &__action {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      &__buttonDetail,
+      &__buttonPay {
+        padding: 10px;
+        border-radius: 5px;
+      }
+      &__buttonDetail {
+        background-color: transparent;
+        border: solid 1px rgb(56, 56, 56);
+        box-shadow: none;
+        color: rgb(56, 56, 56);
+        &:hover {
+          background-color: rgb(238, 238, 238);
+        }
+      }
+    }
+  }
+}

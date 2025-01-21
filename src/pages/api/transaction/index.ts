@@ -3,6 +3,7 @@ import { retrieveDataById, updateData } from "@/lib/firebase/service";
 import { createTransaction, getTransaction } from "@/lib/midtrans/transaction";
 import { responseApiFailed, responseApiSuccess } from "@/utils/responseApi";
 import { verify } from "@/utils/verifyToken";
+import { arrayUnion } from "firebase/firestore";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 type Data = {
@@ -49,8 +50,8 @@ export default async function handler(
       createTransaction(
         params,
         async (transaction: { token: string; redirect_url: string }) => {
-          const user: any = await retrieveDataById("users", decoded.id);
-          let data = {};
+          // const user: any = await retrieveDataById("users", decoded.id);
+          // let data = {};
           const newTransaction = {
             // menambahkan field transaction
             ...payload.transaction,
@@ -61,17 +62,22 @@ export default async function handler(
             orderId: generateOrderId,
           };
 
-          if (user.transaction) {
-            data = {
-              transaction: [...user.transaction, newTransaction],
-              carts: [], // mengosongkan field carts
-            };
-          } else {
-            data = {
-              transaction: [newTransaction],
-              carts: [],
-            };
-          }
+          const data = {
+            transaction: arrayUnion(newTransaction), // menggunakan bawaan firebase
+            carts: [],
+          };
+
+          // if (user.transaction) {
+          //   data = {
+          //     transaction: [...user.transaction, newTransaction],
+          //     carts: [], // mengosongkan field carts
+          //   };
+          // } else {
+          //   data = {
+          //     transaction: [newTransaction],
+          //     carts: [],
+          //   };
+          // }
           await updateData("users", decoded.id, data, (result: boolean) => {
             if (result) {
               responseApiSuccess(res, {
@@ -91,16 +97,24 @@ export default async function handler(
         const order_id = req.query.order_id;
         getTransaction(`${order_id}`, async (result: any) => {
           const user: any = await retrieveDataById("users", decoded.id);
-          const transaction = user.transaction.map((data: any) => {
-            if (data.orderId === order_id) {
-              return {
-                ...data,
-                status: result.transaction_status,
-              };
-            }
-            return data;
-          });
-          const data = { transaction };
+          // const transaction = user.transaction.map((data: any) => { cara lain
+          //   if (data.orderId === order_id) {
+          //     return {
+          //       ...data,
+          //       status: result.transaction_status,
+          //     };
+          //   }
+          //   return data;
+          // });
+          const index = user.transaction.findIndex(
+            (transaction: any) => transaction.orderId === order_id
+          );
+
+          if (index !== -1) {
+            user.transaction[index].status = result.transaction_status;
+          }
+
+          const data = { transaction: user.transaction };
 
           await updateData("users", decoded.id, data, (result: boolean) => {
             if (result) {

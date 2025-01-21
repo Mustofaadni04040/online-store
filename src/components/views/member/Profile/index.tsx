@@ -1,12 +1,5 @@
 import MemberLayout from "@/components/layouts/MemberLayout";
-import React, {
-  Dispatch,
-  FormEvent,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { FormEvent, useContext, useEffect, useState } from "react";
 import styles from "./Profile.module.scss";
 import Input from "@/components/ui/input";
 import Button from "@/components/ui/button";
@@ -190,6 +183,7 @@ export default function ProfileMemberView() {
                       Upload a new avatar, larger image will be resized
                       automatically
                     </p>
+                    <h3>(Upload Here)</h3>
                     <p>
                       Maximum upload size is <b>1 MB</b>
                     </p>
@@ -205,6 +199,7 @@ export default function ProfileMemberView() {
                   e.preventDefault();
                   setChangeImage(e.currentTarget.files[0]);
                 }}
+                required
               />
               <Button
                 type="submit"

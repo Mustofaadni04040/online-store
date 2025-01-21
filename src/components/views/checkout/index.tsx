@@ -12,12 +12,6 @@ import ModalChangeAddress from "./modalChangeAddress";
 import Script from "next/script";
 import transactionServices from "@/services/transaction";
 
-declare global {
-  interface Window {
-    snap: any;
-  }
-}
-
 export default function CheckoutView() {
   const { setToaster } = useContext(ToasterContext);
   const [profile, setProfile] = useState<any>([]);
@@ -90,7 +84,6 @@ export default function CheckoutView() {
         },
       };
       const data = await transactionServices.generateTransaction(payload);
-      console.log(data);
 
       if (data.status === 200) {
         window.snap.pay(data.data.data.token);

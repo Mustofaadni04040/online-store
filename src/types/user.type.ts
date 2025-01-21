@@ -9,4 +9,5 @@ export type User = {
   created_at: Date;
   password: string;
   type?: string;
+  transaction?: [];
 };

@@ -2,7 +2,6 @@ import Button from "@/components/ui/button";
 import Modal from "@/components/ui/modal";
 import React, { Dispatch, SetStateAction, useContext, useState } from "react";
 import styles from "./ModalDeleteProduct.module.scss";
-import { useSession } from "next-auth/react";
 import productServices from "@/services/product";
 import { Product } from "@/types/product.type";
 import { deleteFile } from "@/lib/firebase/service";
