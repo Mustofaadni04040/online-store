@@ -22,6 +22,11 @@ const listSidebarItem = [
     url: "/admin/users",
     icon: "bx bxs-group",
   },
+  {
+    title: "Orders",
+    url: "/admin/orders",
+    icon: "bxs-cart",
+  },
 ];
 export default function AdminLayout({ children }: Proptypes) {
   return (

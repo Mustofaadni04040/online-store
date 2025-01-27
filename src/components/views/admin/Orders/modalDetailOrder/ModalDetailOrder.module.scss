@@ -1,0 +1,38 @@
+.modal {
+  &__title {
+    margin-bottom: 20px;
+  }
+  &__subtitle {
+    margin-bottom: 10px;
+  }
+  &__data {
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    &__item {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+  }
+  &__product {
+    display: flex;
+    gap: 20px;
+    border: 1px solid #dee2e6;
+    padding: 15px;
+    border-radius: 10px;
+    &__info {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      &__data {
+        display: flex;
+        gap: 5px;
+      }
+      &__price {
+        margin-top: 5px;
+      }
+    }
+  }
+}
